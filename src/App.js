@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
-import Layout from "./Layout/Layout";
+import Layout from "./hoc/Layout/Layout";
+
 
 function App() {
   return (
