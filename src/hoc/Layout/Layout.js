@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import classes from './Layout.module.css'
 import Toolbar from "../../components/Navigation/Toolbar/Toolbar";
 import SideDrawer from "../../components/Navigation/SideDrawer/SideDrawer";
 
@@ -23,6 +24,9 @@ const Layout = props => {
                 isAuth={isAuth}
                 open={showSideDrawer}
                 closed={sideDrawerClosedHandler}/>
+                <main className={classes.Content}>
+                    {props.children}
+                </main>
         </React.Fragment>
     )
 

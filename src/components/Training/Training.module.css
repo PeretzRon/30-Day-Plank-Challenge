@@ -1,0 +1,26 @@
+.Training {
+  width: 80%;
+    display: flex;
+}
+
+.Day {
+    display: inline-block;
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid black;
+    box-shadow: 2px 2px 2px #ccc;
+}
+
+.Action {
+    display: inline-block;
+    width: 100%;
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid black;
+    box-shadow: 2px 2px 2px #ccc;
+}
+
+.Completed {
+    text-decoration: line-through;
+}
+
