@@ -5,14 +5,16 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from 'react-router-dom';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
-// import {compose} from 'redux';
+import {compose} from 'redux';
 import thunk from 'redux-thunk';
 import {Provider} from 'react-redux';
 import authReducer from './store/reducers/auth';
 import * as firebase from "firebase";
 import {fireBaseKey} from "./Config/Config";
 
-// const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
+
+const composeEnhancers = (process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null) || compose;
+
 
 const config = {
     apiKey: fireBaseKey,
@@ -26,20 +28,18 @@ const rootReducer = combineReducers({
     auth: authReducer
 });
 
-// const store = createStore(rootReducer, composeEnhancers(
-//     applyMiddleware(thunk)
-// ));
-
-const store = createStore(rootReducer,
+const store = createStore(rootReducer, composeEnhancers(
     applyMiddleware(thunk)
-);
+));
+
+// const store = createStore(rootReducer,
+//     applyMiddleware(thunk)
+// );
 
 const app = (
     <Provider store={store}>
         <BrowserRouter>
-            <React.StrictMode>
                 <App/>
-            </React.StrictMode>
         </BrowserRouter>
     </Provider>
 );

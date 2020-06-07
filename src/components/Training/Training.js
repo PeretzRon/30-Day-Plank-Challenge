@@ -13,7 +13,7 @@ const training = props => {
             </div>
             <div className={style.join(" ")}>
                 <h4>{props.action}</h4>
-                <button onClick={props.completed}>Complete</button>
+                <button id={props.isCompleted ? 'UnCompleted' : 'Completed'} onClick={props.completed}>{props.isCompleted ? 'UnCompleted' : 'Completed'}</button>
             </div>
         </div>
 
