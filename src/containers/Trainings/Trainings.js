@@ -1,13 +1,13 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Training from "../../components/Training/Training";
+import * as firebase from "firebase";
 
 const Trainings = props => {
     const [trainingsData, setTrainingsData] = useState([
         {id: 1, name: '60 Sec Plank', isCompleted: false},
-        {id: 2, name: '70 Sec Plank', isCompleted: false},
-        {id: 3, name: '80 Sec Plank', isCompleted: false},
-        {id: 4, name: '90 Sec Plank', isCompleted: false},
+        {id: 2, name: '70 Sec Plank', isCompleted: false}
     ])
+
 
     const [trainingsDataCompleted, setTrainingsDataCompleted] = useState([])
 
