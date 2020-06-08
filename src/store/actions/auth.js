@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {fireBaseKey, trainingsData} from "../../Config/Config";
 import * as actionTypes from './actionTypes';
-import * as firebase from "firebase";
+import firebase from 'firebase/app';
 
 
 export const authStart = () => {
@@ -73,6 +73,8 @@ export const auth = (email, password, firstName, lastName, isSignUp) => {
                     firebase.database().ref('Trainings/' + response.data.localId).push(
                         {trainingsData}
                     );
+                }else{
+
                 }
             })
             .catch(err => {

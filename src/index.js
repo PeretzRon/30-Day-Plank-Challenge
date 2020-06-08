@@ -9,7 +9,7 @@ import {compose} from 'redux';
 import thunk from 'redux-thunk';
 import {Provider} from 'react-redux';
 import authReducer from './store/reducers/auth';
-import * as firebase from "firebase";
+import firebase from 'firebase/app';
 import {fireBaseKey} from "./Config/Config";
 
 

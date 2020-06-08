@@ -19,7 +19,7 @@ const App = props => {
         routes = <Switch>
             <Route path='/auth' component={Auth}/>
             <Route path='/trainings' component={Trainings}/>
-            <Route path="/logout" component={Logout} />
+            <Route path="/logout" component={Logout}/>
             <Route path="/" component={Home}/>
         </Switch>
     } else {

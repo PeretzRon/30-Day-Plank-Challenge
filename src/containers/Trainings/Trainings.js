@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Training from "../../components/Training/Training";
-import * as firebase from "firebase";
+import firebase from 'firebase/app';
+import 'firebase/database';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {connect} from 'react-redux';
 
@@ -10,7 +11,7 @@ const Trainings = props => {
 
 
     useEffect(() => {
-        const data = firebase.database().ref('Trainings/FOy4vfOn8taHYinSQtTk5hTU0nD3/').once("value", function (snap) {
+        firebase.database().ref(`Trainings/${props.userId}/`).once("value", function (snap) {
             const final = Object.values(Object.values(snap.val())[0]).pop();
             const completed = []
             const unCompleted = []
@@ -18,7 +19,7 @@ const Trainings = props => {
             setTrainingsData(unCompleted)
             setTrainingsDataCompleted(completed)
         });
-    }, [])
+    }, [props.userId])
 
 
     const completedHandler = (event, id) => {
@@ -33,7 +34,10 @@ const Trainings = props => {
                 currentTrainingsDataCompleted.push(Obj[0]);
                 setTrainingsData(currentTrainingsData);
                 setTrainingsDataCompleted(currentTrainingsDataCompleted);
-                firebase.database().ref('Trainings/FOy4vfOn8taHYinSQtTk5hTU0nD3/').child("-M9AWZvnIJqGe6GjOfoM").child('trainingsData').child(id).update({isCompleted: true})
+                firebase.database().ref().child(`Trainings/${props.userId}`).once('value', function (snapshot) {
+                    const subKey = Object.keys(snapshot.val()).pop();
+                    firebase.database().ref(`Trainings/${props.userId}/${subKey}`).child('trainingsData').child(id).update({isCompleted: true})
+                });
                 break;
             case 'UnCompleted':
                 const currentTrainingsDataCompleted1 = [...trainingsDataCompleted];
@@ -44,7 +48,12 @@ const Trainings = props => {
                 currentTrainingsData1.push(Obj1[0]);
                 setTrainingsData(currentTrainingsData1);
                 setTrainingsDataCompleted(currentTrainingsDataCompleted1);
-                firebase.database().ref('Trainings/FOy4vfOn8taHYinSQtTk5hTU0nD3/').child("-M9AWZvnIJqGe6GjOfoM").child('trainingsData').child(id).update({isCompleted: false})
+                firebase.database().ref().child(`Trainings/${props.userId}`).once('value', function (snapshot) {
+                    const subKey = Object.keys(snapshot.val()).pop();
+                    firebase.database().ref(`Trainings/${props.userId}/${subKey}`).child('trainingsData').child(id).update({isCompleted: false})
+                });
+                break;
+            default:
                 break;
         }
 
