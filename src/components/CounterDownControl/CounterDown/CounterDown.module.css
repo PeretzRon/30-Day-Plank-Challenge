@@ -1,0 +1,27 @@
+.Timer-wrapper {
+    margin-left: 1000px;
+    display: flex;
+    justify-content: center;
+}
+
+.Timer {
+    font-family: "Montserrat";
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Text {
+    color: #aaa;
+}
+
+.Value {
+    font-size: 40px;
+}
+
+.Info {
+    max-width: 360px;
+    margin: 40px auto 0;
+    text-align: center;
+    font-size: 16px;
+}
