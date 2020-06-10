@@ -21,7 +21,7 @@ const counterDown = props => {
         <CountdownCircleTimer
             isPlaying={props.isPlayed}
             duration={props.duration}
-            colors={[["#37aa00", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
+            colors={[["#0985bf", 0.33], ["#03a9f4", 0.33], ["#b3e5fc"]]}
             onComplete={() => console.log("Finish")}
         >
             {RenderTime}

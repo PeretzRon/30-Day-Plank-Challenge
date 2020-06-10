@@ -5,14 +5,14 @@
 }
 
 .Timer {
-    font-family: "Montserrat";
+    font-family: 'Varela Round', serif;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .Text {
-    color: #aaa;
+    color: #000;
 }
 
 .Value {

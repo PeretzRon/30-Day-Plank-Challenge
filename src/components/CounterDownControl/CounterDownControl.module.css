@@ -1,0 +1,14 @@
+
+
+.CounterDownControlWrapper {
+
+}
+
+.CounterDownControlWrapper button {
+    margin: 30px;
+}
+
+.CounterDownControl {
+    display: flex;
+    justify-content: center;
+}

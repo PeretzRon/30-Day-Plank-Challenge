@@ -13,7 +13,6 @@ const Trainings = props => {
     const [trainingsData, setTrainingsData] = useState([])
     const [trainingsDataCompleted, setTrainingsDataCompleted] = useState([]);
     const [isCounterDown, setIsCounterDown] = useState(false);
-    const [durationTimer, setDurationTimer] = useState(0);
     const [selectedTraining, setSelectedTraining] = useState(null);
     const myRef = useRef();
 
@@ -75,7 +74,6 @@ const Trainings = props => {
     const startActionHandler = training => {
         setSelectedTraining(training);
         setIsCounterDown(false);
-        // setDurationTimer(training.duration);
         setTimeout(() => {
             setIsCounterDown(true);
             scrollToRef(myRef);
@@ -92,7 +90,7 @@ const Trainings = props => {
                 <section>
                     <p className={classes.Title}>Active Exercises</p>
                     <div>
-                        {trainingsData.map((training, index) => {
+                        {trainingsData.map(training => {
                             return <Training key={training.id} action={training.name} day={training.id}
                                              isCompleted={training.isCompleted}
                                              duration={training.duration}
@@ -104,7 +102,7 @@ const Trainings = props => {
                 <section>
                     <p className={classes.Title}>Finished Exercises</p>
                     <div>
-                        {trainingsDataCompleted.map((training, index) => {
+                        {trainingsDataCompleted.map(training => {
                             return <Training key={training.id} action={training.name} day={training.id}
                                              isCompleted={training.isCompleted}
                                              completed={(event) => completedHandler(event, training.id)}/>
@@ -112,14 +110,14 @@ const Trainings = props => {
                     </div>
                 </section>
                 {isCounterDown &&
+                <div className={classes.CounterDownSection}>
                     <div>
-                        <div>
-                            <h3>{selectedTraining.name}</h3>
-                        </div>
-                        <div style={{height: "300px"}} ref={myRef}>
-                            {<CounterDownControl duration={selectedTraining.duration}/>}
-                        </div>
+                        <h3>{selectedTraining.name}</h3>
                     </div>
+                    <div style={{height: "300px"}} ref={myRef}>
+                        {<CounterDownControl duration={selectedTraining.duration}/>}
+                    </div>
+                </div>
                 }
 
 
