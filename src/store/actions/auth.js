@@ -1,5 +1,4 @@
-import axios from 'axios';
-import {fireBaseKey, trainingsData} from "../../Config/Config";
+import { trainingsData} from "../../Config/Config";
 import * as actionTypes from './actionTypes';
 import firebase from 'firebase/app';
 
@@ -45,42 +44,45 @@ export const checkAuthTimeout = (expirationTime) => {
 export const auth = (email, password, firstName, lastName, isSignUp) => {
     return dispatch => {
         dispatch(authStart());
-        const authData = {
-            email: email,
-            password: password,
-            returnSecureToken: true
-        };
-        let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${fireBaseKey}`;
-        if (!isSignUp) {
-            url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${fireBaseKey}`;
-        }
-        axios.post(url, authData)
-            .then(response => {
-                const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
-                localStorage.setItem('token', response.data.idToken);
-                localStorage.setItem('expirationDate', expirationDate);
-                localStorage.setItem('userId', response.data.localId);
-                dispatch(authSuccess(response.data.idToken, response.data.localId));
-                dispatch(checkAuthTimeout(response.data.expiresIn));
-                if (isSignUp) {
-                    firebase.database().ref('Users/' + response.data.localId).set({
-                        userID: response.data.localId,
+        if (isSignUp) {
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then(firebaseUser => {
+                    firebase.database().ref('Users/' + firebaseUser.user.uid).set({
+                        userID: firebaseUser.user.uid,
                         firstName: firstName,
                         lastName: lastName,
                         email: email
                     });
-
-                    firebase.database().ref('Trainings/' + response.data.localId).push(
+                    firebase.database().ref('Trainings/' + firebaseUser.user.uid).push(
                         {trainingsData}
                     );
-                }else{
+                })
+                .catch( error => {
+                    dispatch(authFail(error.message));
+                });
+        } else {
+            // TODO: auto direct to trainings after signUp
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then(firebaseUser => {
+                    try{
+                        localStorage.setItem('token', firebaseUser.user.xa);
+                        const currentDate = new Date();
+                        const expireDate = currentDate.setHours(currentDate.getHours() + 3)
+                        console.log(new Date(expireDate).toString());
+                        localStorage.setItem('expirationDate', new Date(expireDate)); // TODO: get this data from the object
+                        localStorage.setItem('userId', firebaseUser.user.uid);
+                        dispatch(authSuccess(firebaseUser.user.xa, firebaseUser.user.uid));
+                        dispatch(checkAuthTimeout(3600 * 3));
+                    }catch (e) {
+                        console.log(e);
+                    }
 
-                }
-            })
-            .catch(err => {
-                dispatch(authFail(err.response.data.error));
-                console.log(err.response.data.error);
-            });
+                })
+                .catch(function (error) {
+                    dispatch(authFail(error.message));
+                    console.log(error);
+                });
+        }
     };
 };
 

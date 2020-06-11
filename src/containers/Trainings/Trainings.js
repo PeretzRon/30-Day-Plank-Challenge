@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import Training from "../../components/Training/Training";
 import firebase from 'firebase/app';
 import 'firebase/database';
+import 'firebase/auth';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {connect} from 'react-redux';
 import classes from './Trainings.module.css'
@@ -15,9 +16,10 @@ const Trainings = props => {
     const [isCounterDown, setIsCounterDown] = useState(false);
     const [selectedTraining, setSelectedTraining] = useState(null);
     const myRef = useRef();
+    const starCountRef = firebase.database().ref();
 
     useEffect(() => {
-        firebase.database().ref(`Trainings/${props.userId}/`).once("value", function (snap) {
+        starCountRef.child(`Trainings/${props.userId}/`).on("value", function (snap) {
             const final = Object.values(Object.values(snap.val())[0]).pop();
             const completed = []
             const unCompleted = []
@@ -25,7 +27,14 @@ const Trainings = props => {
             setTrainingsData(unCompleted)
             setTrainingsDataCompleted(completed)
         });
-    }, [props.userId])
+    }, [props.userId, starCountRef])
+
+    useEffect(() => {
+        const unMountFunc = () => {
+            starCountRef.child(`Trainings/${props.userId}/`).off('value');
+        }
+        return () => unMountFunc();
+    }, [props.userId, starCountRef])
 
 
     const completedHandler = (event, id) => {
@@ -82,14 +91,14 @@ const Trainings = props => {
     }
 
     let data = null
-    if (trainingsData.length === 0 && trainingsDataCompleted.length === 0) {
-        data = <CircularProgress/>
+    if ((trainingsData.length === 0 && trainingsDataCompleted.length === 0)) {
+        data = <div className={classes.Center}><CircularProgress size={'10rem'}/></div>
     } else {
         data =
             <div>
                 <section>
                     <p className={classes.Title}>Active Exercises</p>
-                    <div>
+                    <div className={classes.Trainings}>
                         {trainingsData.map(training => {
                             return <Training key={training.id} action={training.name} day={training.id}
                                              isCompleted={training.isCompleted}
@@ -101,7 +110,7 @@ const Trainings = props => {
                 </section>
                 <section>
                     <p className={classes.Title}>Finished Exercises</p>
-                    <div>
+                    <div className={classes.Trainings}>
                         {trainingsDataCompleted.map(training => {
                             return <Training key={training.id} action={training.name} day={training.id}
                                              isCompleted={training.isCompleted}
@@ -110,15 +119,9 @@ const Trainings = props => {
                     </div>
                 </section>
                 {isCounterDown &&
-                <div className={classes.CounterDownSection}>
-                    <div>
-                        <h3>{selectedTraining.name}</h3>
-                    </div>
-                    <div style={{height: "300px"}} ref={myRef}>
-                        {<CounterDownControl duration={selectedTraining.duration}/>}
-                    </div>
-                </div>
-                }
+                <div className={classes.CounterDownSection} ref={myRef}>
+                    <CounterDownControl actionName={selectedTraining.name} duration={selectedTraining.duration}/>
+                </div>}
 
 
             </div>

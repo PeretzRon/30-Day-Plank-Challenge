@@ -6,11 +6,12 @@
 }
 
 .NavigationItem a {
-    color: #8F5C2C;
+    color: #40A4C8;
     text-decoration: none;
     width: 100%;
     box-sizing: border-box;
     display: block;
+    font-size: 1rem;
 }
 
 .NavigationItem a:hover,

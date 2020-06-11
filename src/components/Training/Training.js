@@ -6,9 +6,6 @@ import DoneIcon from '@material-ui/icons/Done';
 import ReplayIcon from '@material-ui/icons/Replay';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
-const styleBtn = {
-
-}
 
 const UseStylesDoneBtn = makeStyles((theme) => ({
     root: {

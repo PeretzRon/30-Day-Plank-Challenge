@@ -19,7 +19,6 @@ const composeEnhancers = (process.env.NODE_ENV === 'development' ? window.__REDU
 const config = {
     apiKey: fireBaseKey,
     databaseURL: "https://days-plank-challenge.firebaseio.com/",
-
 };
 
 firebase.initializeApp(config);
