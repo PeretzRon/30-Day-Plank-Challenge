@@ -95,7 +95,7 @@ const Trainings = props => {
         data = <div className={classes.Center}><CircularProgress size={'10rem'}/></div>
     } else {
         data =
-            <div>
+            <div className={classes.TrainingsWrapper}>
                 <section>
                     <p className={classes.Title}>Active Exercises</p>
                     <div className={classes.Trainings}>

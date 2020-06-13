@@ -1,8 +1,13 @@
+.TrainingsWrapper {
+    margin-top: 70px;
+}
+
 .Trainings {
     display: flex;
     justify-content: center;
     flex-direction: column;
     text-align: center;
+
 }
 .CounterDownSection {
     display: flex;
