@@ -1,4 +1,4 @@
-import { trainingsData} from "../../Config/Config";
+import {trainingsData} from "../../Config/Config";
 import * as actionTypes from './actionTypes';
 import firebase from 'firebase/app';
 
@@ -23,6 +23,14 @@ export const authFail = (error) => {
         error: error
     };
 };
+
+export const authSignUpSuccess = (status) => {
+    return {
+        type: actionTypes.AUTH_SUCCESSFUL_SIGN_UP,
+        status: status
+    };
+};
+
 
 export const logout = () => {
     localStorage.removeItem('token');
@@ -56,24 +64,24 @@ export const auth = (email, password, firstName, lastName, isSignUp) => {
                     firebase.database().ref('Trainings/' + firebaseUser.user.uid).push(
                         {trainingsData}
                     );
+                    dispatch(authSignUpSuccess(true))
                 })
-                .catch( error => {
+                .catch(error => {
                     dispatch(authFail(error.message));
                 });
         } else {
             // TODO: auto direct to trainings after signUp
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then(firebaseUser => {
-                    try{
+                    try {
                         localStorage.setItem('token', firebaseUser.user.xa);
                         const currentDate = new Date();
-                        const expireDate = currentDate.setHours(currentDate.getHours() + 3)
-                        console.log(new Date(expireDate).toString());
+                        const expireDate = currentDate.setHours(currentDate.getHours() + 24)
                         localStorage.setItem('expirationDate', new Date(expireDate)); // TODO: get this data from the object
                         localStorage.setItem('userId', firebaseUser.user.uid);
                         dispatch(authSuccess(firebaseUser.user.xa, firebaseUser.user.uid));
-                        dispatch(checkAuthTimeout(3600 * 3));
-                    }catch (e) {
+                        dispatch(checkAuthTimeout(3600 * 24));
+                    } catch (e) {
                         console.log(e);
                     }
 

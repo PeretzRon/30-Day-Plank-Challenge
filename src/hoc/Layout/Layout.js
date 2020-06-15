@@ -17,19 +17,20 @@ const Layout = props => {
 
     return (
         <React.Fragment>
-            <Toolbar
-                isAuth={props.isAuthenticated}
-                drawerToggleClicked={sideDrawerToggleHandler}/>
-            <SideDrawer
-                isAuth={props.isAuthenticated}
-                open={showSideDrawer}
-                closed={sideDrawerClosedHandler}/>
-            <main className={classes.Content}>
-                {props.children}
-            </main>
+            <div className={classes.Content}>
+                <Toolbar
+                    isAuth={props.isAuthenticated}
+                    drawerToggleClicked={sideDrawerToggleHandler}/>
+                <SideDrawer
+                    isAuth={props.isAuthenticated}
+                    open={showSideDrawer}
+                    closed={sideDrawerClosedHandler}/>
+                <main className={classes.Content}>
+                    {props.children}
+                </main>
+            </div>
         </React.Fragment>
     )
-
 };
 
 const mapStateToProps = state => {

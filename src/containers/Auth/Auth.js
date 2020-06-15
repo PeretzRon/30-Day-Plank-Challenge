@@ -13,6 +13,9 @@ import Container from '@material-ui/core/Container';
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 import {Redirect} from "react-router-dom";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import classes from './Auth.module.css';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,12 +40,13 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Auth = props => {
-    const classes = useStyles();
+    const classesUI = useStyles();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [isSignUp, setIsSignUp] = useState(false);
+    const MySwal = withReactContent(Swal)
 
     const onSubmitHandler = (event) => {
         event.preventDefault();
@@ -57,16 +61,16 @@ const Auth = props => {
 
     let authPage = null;
     if (isSignUp) {
-        authPage = <Container component="main" maxWidth="xs">
+        authPage = <Container className={classes.Auth} component="main" maxWidth="xs">
             <CssBaseline/>
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
+            <div className={classesUI.paper}>
+                <Avatar className={classesUI.avatar}>
                     <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <form className={classes.form} noValidate onSubmit={onSubmitHandler}>
+                <form className={classesUI.form} noValidate onSubmit={onSubmitHandler}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -128,7 +132,7 @@ const Auth = props => {
                         fullWidth
                         variant="contained"
                         color="primary"
-                        className={classes.submit}
+                        className={classesUI.submit}
                     >
                         Sign Up
                     </Button>
@@ -145,16 +149,16 @@ const Auth = props => {
             </Box>
         </Container>
     } else {
-        authPage = <Container component="main" maxWidth="xs">
+        authPage = <Container className={classes.Auth} component="main" maxWidth="xs">
             <CssBaseline/>
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
+            <div className={classesUI.paper}>
+                <Avatar className={classesUI.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate onSubmit={onSubmitHandler}>
+                <form className={classesUI.form} noValidate onSubmit={onSubmitHandler}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -183,7 +187,7 @@ const Auth = props => {
                         fullWidth
                         variant="contained"
                         color="primary"
-                        className={classes.submit}
+                        className={classesUI.submit}
                     >
                         Sign In
                     </Button>
@@ -209,6 +213,10 @@ const Auth = props => {
         authRedirect = <Redirect to={'/trainings'}/>
     }
 
+    if(props.isUserCreated) {
+        // TODO: auth user
+    }
+
     return (
         <React.Fragment>
             {authRedirect}
@@ -222,7 +230,8 @@ const mapStateToProps = state => {
         loading: state.auth.loading,
         error: state.auth.error,
         isAuthenticated: state.auth.token !== null,
-        authRedirectPath: state.auth.authRedirectPath
+        authRedirectPath: state.auth.authRedirectPath,
+        isUserCreated: state.auth.isUserCreated
     };
 };
 

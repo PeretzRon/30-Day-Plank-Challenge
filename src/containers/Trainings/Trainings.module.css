@@ -1,5 +1,5 @@
 .TrainingsWrapper {
-    margin-top: 70px;
+  margin-top: 5px;
 }
 
 .Trainings {
@@ -10,10 +10,12 @@
 
 }
 .CounterDownSection {
+    padding-top: 70px;
     display: flex;
     justify-content: center;
     flex-direction: column;
     text-align: center;
+    margin-bottom: 30px;
 }
 
 .Title {

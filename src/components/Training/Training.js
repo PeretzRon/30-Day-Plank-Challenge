@@ -41,16 +41,29 @@ const training = props => {
     const classesStyleDoneBtn = UseStylesDoneBtn();
     const classesStyleStartBtn = UseStylesStartBtn();
     const styleTraining = [classes.Training];
+    let isCompletedStyle = ""
     if (props.isCompleted) {
-        styleTraining.push(classes.Completed);
+        styleTraining.push(classes.CompletedBackGround);
+        isCompletedStyle = classes.Completed;
     }
+    let title = null
+    if (props.action) {
+        title = props.action.split('+').map(row => {
+            return (
+                <div key={row}>
+                    <p>{row}</p>
+                </div>
+            )
+        })
+    }
+
     return (
         <div className={styleTraining.join(" ")}>
-            <div className={classes.Day}>
+            <div className={[classes.Day, isCompletedStyle].join(" ")}>
                 <h1>Day {props.day}</h1>
             </div>
-            <div className={classes.Title}>
-                <h2>{props.action}</h2>
+            <div className={[classes.Title, isCompletedStyle].join(" ")}>
+                <div>{title}</div>
             </div>
             <div className={classes.Action}>
                 <div className={classes.Btn} id={props.isCompleted ? 'UNDONE' : 'DONE'} onClick={props.completed}>
@@ -60,7 +73,6 @@ const training = props => {
                         variant="contained"
                         startIcon={props.isCompleted ? <ReplayIcon/> : <DoneIcon/>}
                         color="secondary"
-                        // style={styleBtn}
                     >
                         {props.isCompleted ? 'UNDONE' : 'DONE'}
                     </Button>
@@ -68,12 +80,11 @@ const training = props => {
 
                 <div className={classes.Btn}>
                     {!props.isCompleted && <Button className={classesStyleStartBtn.root}
-                        onClick={props.startAction}
-                        // style={}
-                        variant="contained"
-                        color="primary"
-                        size="medium"
-                        startIcon={<PlayArrowIcon/>}
+                                                   onClick={props.startAction}
+                                                   variant="contained"
+                                                   color="primary"
+                                                   size="medium"
+                                                   startIcon={<PlayArrowIcon/>}
                     >
                         START!
                     </Button>}

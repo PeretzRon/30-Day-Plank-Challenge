@@ -8,26 +8,41 @@ import {connect} from 'react-redux';
 import classes from './Trainings.module.css'
 import CounterDownControl from "../../components/CounterDownControl/CounterDownControl";
 
-const scrollToRef = (ref) => window.scrollTo({top: ref.current.offsetTop, behavior: 'smooth'})
+const scrollToRef = (ref) => {
+    // window.scrollTo({top: ref.current.offsetTop, behavior: 'smooth'})
+    ref.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'start',
+    });
+}
 
 const Trainings = props => {
     const [trainingsData, setTrainingsData] = useState([])
-    const [trainingsDataCompleted, setTrainingsDataCompleted] = useState([]);
+    const [userUnDoneTrainings, setUserUnDoneTrainings] = useState([])
+    const [userDoneTrainings, SetUserDoneTrainings] = useState([]);
     const [isCounterDown, setIsCounterDown] = useState(false);
-    const [selectedTraining, setSelectedTraining] = useState(null);
+    const [selectedTraining, setSelectedTraining] = useState([]);
     const myRef = useRef();
     const starCountRef = firebase.database().ref();
 
+
     useEffect(() => {
-        starCountRef.child(`Trainings/${props.userId}/`).on("value", function (snap) {
-            const final = Object.values(Object.values(snap.val())[0]).pop();
+        starCountRef.child(`Trainings/${props.userId}/`).on("value", snap => {
+            const final = Object.values(Object.values(snap.val())[0])[0];
             const completed = []
             const unCompleted = []
             final.forEach(item => item.isCompleted ? completed.push(item) : unCompleted.push(item));
-            setTrainingsData(unCompleted)
-            setTrainingsDataCompleted(completed)
+            setUserUnDoneTrainings(unCompleted)
+            SetUserDoneTrainings(completed)
+        });
+
+        starCountRef.child('TrainingsData').once("value", snap => {
+            const allTrainings = Object.values(Object.values(snap.val()));
+            setTrainingsData(allTrainings);
         });
     }, [props.userId, starCountRef])
+
 
     useEffect(() => {
         const unMountFunc = () => {
@@ -36,22 +51,21 @@ const Trainings = props => {
         return () => unMountFunc();
     }, [props.userId, starCountRef])
 
-
     const completedHandler = (event, id) => {
         event.preventDefault();
 
         switch (event.currentTarget.id) {
             case 'DONE' :
-                const currentTrainingsData = [...trainingsData];
+                const currentTrainingsData = [...userUnDoneTrainings];
                 const indexCompleted = currentTrainingsData.findIndex(value => value.id === id);
                 const Obj = currentTrainingsData.splice(indexCompleted, 1);
                 Obj[0].isCompleted = true;
-                const currentTrainingsDataCompleted = [...trainingsDataCompleted];
+                const currentTrainingsDataCompleted = [...userDoneTrainings];
                 currentTrainingsDataCompleted.push(Obj[0]);
                 currentTrainingsData.sort((a, b) => a.id - b.id);
-                setTrainingsData(currentTrainingsData);
+                setUserUnDoneTrainings(currentTrainingsData);
                 currentTrainingsDataCompleted.sort((a, b) => a.id - b.id);
-                setTrainingsDataCompleted(currentTrainingsDataCompleted);
+                SetUserDoneTrainings(currentTrainingsDataCompleted);
 
                 firebase.database().ref().child(`Trainings/${props.userId}`).once('value', function (snapshot) {
                     const subKey = Object.keys(snapshot.val()).pop();
@@ -59,17 +73,16 @@ const Trainings = props => {
                 });
                 break;
             case 'UNDONE':
-                const currentTrainingsDataCompleted1 = [...trainingsDataCompleted];
+                const currentTrainingsDataCompleted1 = [...userDoneTrainings];
                 const index = currentTrainingsDataCompleted1.findIndex(value => value.id === id);
                 const Obj1 = currentTrainingsDataCompleted1.splice(index, 1);
                 Obj1[0].isCompleted = false;
-                const currentTrainingsData1 = [...trainingsData];
+                const currentTrainingsData1 = [...userUnDoneTrainings];
                 currentTrainingsData1.push(Obj1[0]);
                 currentTrainingsData1.sort((a, b) => a.id - b.id);
                 currentTrainingsDataCompleted1.sort((a, b) => a.id - b.id);
-                console.log(currentTrainingsData1);
-                setTrainingsData(currentTrainingsData1);
-                setTrainingsDataCompleted(currentTrainingsDataCompleted1);
+                setUserUnDoneTrainings(currentTrainingsData1);
+                SetUserDoneTrainings(currentTrainingsDataCompleted1);
                 firebase.database().ref().child(`Trainings/${props.userId}`).once('value', function (snapshot) {
                     const subKey = Object.keys(snapshot.val()).pop();
                     firebase.database().ref(`Trainings/${props.userId}/${subKey}`).child('trainingsData').child(id).update({isCompleted: false})
@@ -81,7 +94,8 @@ const Trainings = props => {
     }
 
     const startActionHandler = training => {
-        setSelectedTraining(training);
+        const d = trainingsData[training.id - 1];
+        setSelectedTraining(d);
         setIsCounterDown(false);
         setTimeout(() => {
             setIsCounterDown(true);
@@ -89,9 +103,8 @@ const Trainings = props => {
         }, 100)
 
     }
-
     let data = null
-    if ((trainingsData.length === 0 && trainingsDataCompleted.length === 0)) {
+    if ((userUnDoneTrainings.length === 0 && userDoneTrainings.length === 0)) {
         data = <div className={classes.Center}><CircularProgress size={'10rem'}/></div>
     } else {
         data =
@@ -99,7 +112,7 @@ const Trainings = props => {
                 <section>
                     <p className={classes.Title}>Active Exercises</p>
                     <div className={classes.Trainings}>
-                        {trainingsData.map(training => {
+                        {userUnDoneTrainings.map(training => {
                             return <Training key={training.id} action={training.name} day={training.id}
                                              isCompleted={training.isCompleted}
                                              duration={training.duration}
@@ -111,7 +124,7 @@ const Trainings = props => {
                 <section>
                     <p className={classes.Title}>Finished Exercises</p>
                     <div className={classes.Trainings}>
-                        {trainingsDataCompleted.map(training => {
+                        {userDoneTrainings.map(training => {
                             return <Training key={training.id} action={training.name} day={training.id}
                                              isCompleted={training.isCompleted}
                                              completed={(event) => completedHandler(event, training.id)}/>
@@ -119,11 +132,10 @@ const Trainings = props => {
                     </div>
                 </section>
                 {isCounterDown &&
-                <div className={classes.CounterDownSection} ref={myRef}>
-                    <CounterDownControl actionName={selectedTraining.name} duration={selectedTraining.duration}/>
-                </div>}
-
-
+                <div ref={myRef} className={classes.CounterDownSection}>
+                    <CounterDownControl timers={selectedTraining}/>
+                </div>
+                }
             </div>
     }
 

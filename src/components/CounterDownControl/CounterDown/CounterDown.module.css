@@ -1,7 +1,22 @@
 .Timer-wrapper {
-    margin-left: 1000px;
     display: flex;
     justify-content: center;
+
+}
+
+
+.Counter{
+    margin: 10px 0;
+}
+
+.Counter:last-child {
+    margin-bottom: 70px;
+}
+
+.Timers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .Timer {
@@ -9,19 +24,34 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-size: 3.3rem;
 }
 
 .Text {
     color: #000;
+
 }
 
 .Value {
-    font-size: 40px;
+    font-size: 5rem;
 }
 
-.Info {
-    max-width: 360px;
-    margin: 40px auto 0;
-    text-align: center;
-    font-size: 16px;
+@media only screen and (max-width: 599px) {
+    .Value {
+        font-size: 3rem;
+    }
+
+    .Timer {
+        font-size: 1.3rem;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .Value {
+        font-size: 3rem;
+    }
+
+    .Timer {
+        font-size: 1.3rem;
+    }
 }

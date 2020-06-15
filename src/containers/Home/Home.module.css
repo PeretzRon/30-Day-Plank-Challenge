@@ -3,39 +3,49 @@
     background-image: linear-gradient(to right bottom, rgba(0, 62, 90, 0.8), rgba(179, 229, 252, 0.8)), url(../../resources/img/hero.jpg);
     background-size: cover;
     background-position: top;
-    height: 95vh;
-    clip-path: polygon(100% 0, 100% 83%, 0 100%, 0 0);
+    height: 100vh;
+    clip-path: polygon(100% 0, 100% 67%, 44% 100%, 0 89%, 0 0);
     position: relative;
 }
 
 .TextBox {
-
+    display: block;
 }
 
 .HeadingPrimary {
-    font-family: 'Lato', serif;
+    font-family: 'Exo', serif;
     position: absolute;
-    top: 20%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: white;
+    color: #ffffff;
     backface-visibility: hidden;
+
 }
 
 .HeadingPrimaryMain {
     display: block;
-    font-size: 4rem;
+    font-size: 3.4rem;
     font-weight: 300;
-    letter-spacing: 13px;
+    letter-spacing: 18px;
     text-transform: uppercase;
+
     animation: moveRight 700ms ease-out;
+}
+
+.HeadingPrimaryDay {
+    font-weight: 900;
+    font-size: 4rem;
+    font-family: "Lato", serif;
+    white-space: nowrap;
 }
 
 .HeadingPrimarySub {
     margin-top: 20px;
     display: block;
     font-size: 2rem;
-    font-weight: 400;
+    font-family: "Anton";
+    font-weight: 300;
     animation: moveLeft 700ms ease-out;
     letter-spacing: 4px;
 }
@@ -73,14 +83,18 @@
     }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
     .HeadingPrimaryMain {
-        font-size: 2.7rem;
+        font-size: 2.4rem;
         letter-spacing: 13px;
     }
 
+    .HeadingPrimaryDay {
+        font-size: 3.2rem;
+    }
+
     .HeadingPrimarySub {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         letter-spacing: 4px;
     }
 }
