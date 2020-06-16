@@ -7,6 +7,11 @@
     font-size: 4vw;
     margin: 0 20px;
     white-space: nowrap;
+
+}
+
+.HeaderAction p {
+    margin-block-end: 0;
 }
 
 .CounterDownControlWrapper button {

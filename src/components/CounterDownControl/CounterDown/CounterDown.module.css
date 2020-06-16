@@ -24,7 +24,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 3.3rem;
+    font-size: 2.9rem;
 }
 
 .Text {
@@ -34,6 +34,16 @@
 
 .Value {
     font-size: 5rem;
+}
+
+@media only screen and (max-width: 800px) {
+    .Value {
+        font-size: 3rem;
+    }
+
+    .Timer {
+        font-size: 2rem;
+    }
 }
 
 @media only screen and (max-width: 599px) {

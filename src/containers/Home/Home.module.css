@@ -1,10 +1,10 @@
 
 .Header {
-    background-image: linear-gradient(to right bottom, rgba(0, 62, 90, 0.8), rgba(179, 229, 252, 0.8)), url(../../resources/img/hero.jpg);
+    background-image: linear-gradient(to right bottom, rgba(0, 62, 90, 0.8), rgba(24, 90, 118, 0.8)), url(../../resources/img/hero.jpg);
     background-size: cover;
     background-position: top;
     height: 100vh;
-    clip-path: polygon(100% 0, 100% 67%, 44% 100%, 0 89%, 0 0);
+    clip-path: polygon(0 0, 100% 0, 100% 80%, 0% 100%);
     position: relative;
 }
 

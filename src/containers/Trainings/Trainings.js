@@ -26,7 +26,6 @@ const Trainings = props => {
     const myRef = useRef();
     const starCountRef = firebase.database().ref();
 
-
     useEffect(() => {
         starCountRef.child(`Trainings/${props.userId}/`).on("value", snap => {
             const final = Object.values(Object.values(snap.val())[0])[0];
@@ -40,6 +39,7 @@ const Trainings = props => {
         starCountRef.child('TrainingsData').once("value", snap => {
             const allTrainings = Object.values(Object.values(snap.val()));
             setTrainingsData(allTrainings);
+            window.scrollTo(0, 0);
         });
     }, [props.userId, starCountRef])
 
@@ -105,7 +105,11 @@ const Trainings = props => {
     }
     let data = null
     if ((userUnDoneTrainings.length === 0 && userDoneTrainings.length === 0)) {
-        data = <div className={classes.Center}><CircularProgress size={'10rem'}/></div>
+        data = <div className={classes.PageHeight}>
+            <div className={classes.Center}>
+                <CircularProgress size={'10rem'}/>
+            </div>
+        </div>
     } else {
         data =
             <div className={classes.TrainingsWrapper}>

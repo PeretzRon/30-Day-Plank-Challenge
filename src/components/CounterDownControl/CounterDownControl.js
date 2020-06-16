@@ -7,7 +7,7 @@ const CounterDownControl = props => {
     return (
         <div className={classes.CounterDownControlWrapper}>
             <div className={classes.HeaderAction}>
-                <h3>{props.timers.map(elem=> elem.name).join(' + ')}</h3>
+                <p>{props.timers.map(elem=> elem.name).join(' + ')}</p>
             </div>
             <div className={classes.CounterDownControl}>
                 <CounterDown timers={props.timers}/>

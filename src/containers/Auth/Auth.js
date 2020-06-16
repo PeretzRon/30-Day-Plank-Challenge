@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -48,6 +48,10 @@ const Auth = props => {
     const [isSignUp, setIsSignUp] = useState(false);
     const MySwal = withReactContent(Swal)
 
+    useEffect(() => {
+        window.scrollTo({top: 0});
+    }, [])
+
     const onSubmitHandler = (event) => {
         event.preventDefault();
         props.onAuth(email, password, firstName, lastName, isSignUp);
@@ -61,7 +65,7 @@ const Auth = props => {
 
     let authPage = null;
     if (isSignUp) {
-        authPage = <Container className={classes.Auth} component="main" maxWidth="xs">
+        authPage = <Container component="main" maxWidth="xs">
             <CssBaseline/>
             <div className={classesUI.paper}>
                 <Avatar className={classesUI.avatar}>
@@ -149,7 +153,7 @@ const Auth = props => {
             </Box>
         </Container>
     } else {
-        authPage = <Container className={classes.Auth} component="main" maxWidth="xs">
+        authPage = <Container component="main" maxWidth="xs">
             <CssBaseline/>
             <div className={classesUI.paper}>
                 <Avatar className={classesUI.avatar}>
@@ -218,10 +222,10 @@ const Auth = props => {
     }
 
     return (
-        <React.Fragment>
+        <div className={classes.Auth} >
             {authRedirect}
             {authPage}
-        </React.Fragment>
+        </div>
     );
 }
 

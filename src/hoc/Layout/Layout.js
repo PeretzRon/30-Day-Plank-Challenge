@@ -3,6 +3,7 @@ import classes from './Layout.module.css'
 import Toolbar from "../../components/Navigation/Toolbar/Toolbar";
 import SideDrawer from "../../components/Navigation/SideDrawer/SideDrawer";
 import {connect} from 'react-redux';
+import Footer from "../../components/Footer/Footer";
 
 const Layout = props => {
     const [showSideDrawer, setsShowSideDrawer] = useState(false);
@@ -28,6 +29,7 @@ const Layout = props => {
                 <main className={classes.Content}>
                     {props.children}
                 </main>
+                <Footer/>
             </div>
         </React.Fragment>
     )

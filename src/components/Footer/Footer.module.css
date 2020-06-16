@@ -1,0 +1,118 @@
+footer {
+    margin-top: 50px;
+    background-color: #333;
+    padding: 50px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+
+.mainRow {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+
+.copyRight {
+    transform: translateY(10px);
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.logoBox {
+    margin: 0 40px;
+    transform: translateY(-30px);
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.socialLinks {
+    transform: translateY(10px);
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.Logo {
+    height: 100px;
+    width: 160px
+}
+
+.socialLinks ul {
+    list-style-type: none;
+    padding-inline-start: 0;
+    display: flex;
+}
+
+.footer-nav li,
+.socialLinks ul li {
+    margin-right: 20px;
+}
+
+.socialLinks ul li:last-child {
+    margin-right: 0; /* for the last icon at the row */
+}
+
+.socialLinks ul li a:link,
+.socialLinks ul li a:visited {
+    text-decoration: none;
+    border: 0;
+    color: #ffffff;
+    transition: color 0.2s;
+}
+
+
+.socialLinks ul li a:link,
+.socialLinks ul li a:visited {
+    font-size: 160%;
+}
+
+.ionSocialFacebook,
+.ionSocialLinkedIn,
+.ionSocialGitHub {
+    transition: color 0.2s;
+}
+
+.ionSocialFacebook:hover {
+    color: #3b5998;
+}
+
+.ionSocialLinkedIn:hover {
+    color: #00aced;
+}
+
+.ionSocialGitHub:hover {
+    color: #b7d0e0;
+}
+
+footer p {
+    color: white;
+    text-align: center;
+}
+
+@media only screen and (max-width: 599px) {
+    .mainRow {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .copyRight {
+        transform: translate(0);
+    }
+
+    .socialLinks {
+        transform: translate(0);
+    }
+
+    .Logo {
+        height: 40px;
+        width: 80px;
+    }
+
+    .logoBox {
+        transform: translate(0);
+    }
+}
