@@ -13,9 +13,8 @@ import Container from '@material-ui/core/Container';
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 import {Redirect} from "react-router-dom";
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 import classes from './Auth.module.css';
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(2),
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
@@ -46,11 +45,11 @@ const Auth = props => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [isSignUp, setIsSignUp] = useState(false);
-    const MySwal = withReactContent(Swal)
 
     useEffect(() => {
         window.scrollTo({top: 0});
     }, [])
+
 
     const onSubmitHandler = (event) => {
         event.preventDefault();
@@ -62,7 +61,7 @@ const Auth = props => {
         setPassword("");
     }
 
-
+    let spinner = props.loading ? <div className={classesUI.form}><LinearProgress/></div> : null
     let authPage = null;
     if (isSignUp) {
         authPage = <Container component="main" maxWidth="xs">
@@ -131,6 +130,7 @@ const Auth = props => {
                         </Grid>
 
                     </Grid>
+                    {spinner}
                     <Button
                         type="submit"
                         fullWidth
@@ -157,7 +157,7 @@ const Auth = props => {
             <CssBaseline/>
             <div className={classesUI.paper}>
                 <Avatar className={classesUI.avatar}>
-                    <LockOutlinedIcon />
+                    <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign in
@@ -186,6 +186,7 @@ const Auth = props => {
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
                     />
+                    {spinner}
                     <Button
                         type="submit"
                         fullWidth
@@ -195,6 +196,7 @@ const Auth = props => {
                     >
                         Sign In
                     </Button>
+
                     <Grid container>
                         <Grid item xs>
                             <Link href="#" variant="body2">
@@ -217,12 +219,8 @@ const Auth = props => {
         authRedirect = <Redirect to={'/trainings'}/>
     }
 
-    if(props.isUserCreated) {
-        // TODO: auth user
-    }
-
     return (
-        <div className={classes.Auth} >
+        <div className={classes.Auth}>
             {authRedirect}
             {authPage}
         </div>
@@ -243,6 +241,8 @@ const mapDispatchToProps = dispatch => {
     return {
         onAuth: (email, password, firstName, lastName, isSignUp) => dispatch(actions.auth(email, password, firstName, lastName, isSignUp)),
         // onSetAuthRedirectPath: () => dispatch( actions.setAuthRedirectPath( '/' ) )
+        onChangeSignUpState: (status) => {
+        }
     };
 };
 

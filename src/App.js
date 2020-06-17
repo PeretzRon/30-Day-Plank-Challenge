@@ -10,9 +10,10 @@ import * as actions from './store/actions/index';
 import Logout from "./containers/Auth/Logout/Logout";
 
 const App = props => {
+    const {onTryAutoSignup} = props;
     useEffect(() => {
-        props.onTryAutoSignup();
-    }, [])
+        onTryAutoSignup();
+    }, [onTryAutoSignup])
 
     let routes;
     if (props.isAuthenticated) {

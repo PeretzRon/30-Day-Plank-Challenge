@@ -10,7 +10,7 @@ const CounterDownControl = props => {
                 <p>{props.timers.map(elem=> elem.name).join(' + ')}</p>
             </div>
             <div className={classes.CounterDownControl}>
-                <CounterDown timers={props.timers}/>
+                <CounterDown finishedTraining={props.finishedTraining} cancelTraining={props.cancelTraining} timers={props.timers}/>
             </div>
 
         </div>

@@ -51,10 +51,16 @@ const Trainings = props => {
         return () => unMountFunc();
     }, [props.userId, starCountRef])
 
-    const completedHandler = (event, id) => {
-        event.preventDefault();
+    const completedHandler = (event, id, target = null) => {
+        let currentTarget;
+        if (event) {
+            event.preventDefault();
+            currentTarget = event.currentTarget.id
+        } else {
+            currentTarget = target;
+        }
 
-        switch (event.currentTarget.id) {
+        switch (currentTarget) {
             case 'DONE' :
                 const currentTrainingsData = [...userUnDoneTrainings];
                 const indexCompleted = currentTrainingsData.findIndex(value => value.id === id);
@@ -94,15 +100,26 @@ const Trainings = props => {
     }
 
     const startActionHandler = training => {
-        const d = trainingsData[training.id - 1];
-        setSelectedTraining(d);
+        const userSelectedTraining = trainingsData[training.id - 1];
+        setSelectedTraining(userSelectedTraining);
         setIsCounterDown(false);
         setTimeout(() => {
             setIsCounterDown(true);
             scrollToRef(myRef);
         }, 100)
-
     }
+
+    const onStopTimerButtonHandler = () => {
+        window.scrollTo({top: 0, behavior: "smooth"})
+        setIsCounterDown(false)
+    }
+
+    const onFinishTraining = () => {
+        window.scrollTo({top: 0, behavior: "smooth"})
+        setIsCounterDown(false)
+        completedHandler(null, selectedTraining[0].TrainingID, 'DONE')
+    };
+
     let data = null
     if ((userUnDoneTrainings.length === 0 && userDoneTrainings.length === 0)) {
         data = <div className={classes.PageHeight}>
@@ -137,7 +154,8 @@ const Trainings = props => {
                 </section>
                 {isCounterDown &&
                 <div ref={myRef} className={classes.CounterDownSection}>
-                    <CounterDownControl timers={selectedTraining}/>
+                    <CounterDownControl finishedTraining={onFinishTraining} cancelTraining={onStopTimerButtonHandler}
+                                        timers={selectedTraining}/>
                 </div>
                 }
             </div>

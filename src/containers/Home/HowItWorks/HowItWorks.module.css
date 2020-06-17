@@ -1,0 +1,49 @@
+.HowItWorksSection {
+    margin-top: -30vh;
+   background-color: #e6f5fa;
+    padding-bottom: 3rem;
+}
+
+.SectionHeader {
+    padding-top: 15rem;
+    text-align: center;
+    font-family: "Lato", serif;
+    font-weight: 300;
+    letter-spacing: 4px;
+    font-size: 2rem;
+}
+
+.SectionHeader::after {
+    margin: 20px auto;
+    content: "";
+    background-color: #2ea8d0;
+    height: 2px;
+    width: 200px;
+    display: block;
+}
+
+.Simple {
+    font-weight: 300;
+    font-size: 1.3rem;
+}
+
+@media only screen and (max-width: 700px) {
+    .SectionHeader {
+        font-size: 1.5rem;
+    }
+    .Simple {
+        font-size: 0.8em;
+    }
+
+}
+
+@media only screen and (max-width: 599px) {
+    .SectionHeader {
+        font-size: 1rem;
+    }
+    .Simple {
+        font-size: 0.8em;
+    }
+
+}
+

@@ -1,6 +1,8 @@
 import {trainingsData} from "../../Config/Config";
 import * as actionTypes from './actionTypes';
 import firebase from 'firebase/app';
+import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2";
 
 
 export const authStart = () => {
@@ -24,7 +26,7 @@ export const authFail = (error) => {
     };
 };
 
-export const authSignUpSuccess = (status) => {
+export const authSignUpChangeStatus = (status) => {
     return {
         type: actionTypes.AUTH_SUCCESSFUL_SIGN_UP,
         status: status
@@ -49,50 +51,40 @@ export const checkAuthTimeout = (expirationTime) => {
     };
 };
 
-export const auth = (email, password, firstName, lastName, isSignUp) => {
-    return dispatch => {
-        dispatch(authStart());
-        if (isSignUp) {
-            firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then(firebaseUser => {
-                    firebase.database().ref('Users/' + firebaseUser.user.uid).set({
-                        userID: firebaseUser.user.uid,
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: email
-                    });
-                    firebase.database().ref('Trainings/' + firebaseUser.user.uid).push(
-                        {trainingsData}
-                    );
-                    dispatch(authSignUpSuccess(true))
-                })
-                .catch(error => {
-                    dispatch(authFail(error.message));
-                });
-        } else {
-            // TODO: auto direct to trainings after signUp
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then(firebaseUser => {
-                    try {
-                        localStorage.setItem('token', firebaseUser.user.xa);
-                        const currentDate = new Date();
-                        const expireDate = currentDate.setHours(currentDate.getHours() + 24)
-                        localStorage.setItem('expirationDate', new Date(expireDate)); // TODO: get this data from the object
-                        localStorage.setItem('userId', firebaseUser.user.uid);
-                        dispatch(authSuccess(firebaseUser.user.xa, firebaseUser.user.uid));
-                        dispatch(checkAuthTimeout(3600 * 24));
-                    } catch (e) {
-                        console.log(e);
-                    }
-
-                })
-                .catch(function (error) {
-                    dispatch(authFail(error.message));
-                    console.log(error);
-                });
-        }
-    };
+const onSuccessfulAuth = (dispatch, data) => {
+    const currentDate = new Date();
+    const expireDate = currentDate.setHours(currentDate.getHours() + 48)
+    localStorage.setItem('token', data.user.xa);
+    localStorage.setItem('expirationDate', new Date(expireDate));
+    localStorage.setItem('userId', data.user.uid);
+    dispatch(authSuccess(data.user.xa, data.user.uid));
+    dispatch(checkAuthTimeout(3600 * 48));
 };
+
+const massageAfterSignUp = (dispatch, data, firstName, lastName) => {
+    const MySwal = withReactContent(Swal)
+    MySwal.fire({
+        title: `Welcome ${firstName} ${lastName}`,
+        text: `Your user created successfully`,
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Continue'
+    }).then((result) => {
+        onSuccessfulAuth(dispatch, data)
+    })
+}
+const massageAuthError = () => {
+    const MySwal = withReactContent(Swal)
+    MySwal.fire({
+        title: `Oops...`,
+        text: `Something went wrong!`,
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Try Again'
+    })
+}
+
+
 
 export const setAuthRedirectPath = (path) => {
     return {
@@ -118,4 +110,40 @@ export const authCheckState = () => {
         }
     };
 };
+
+export const auth = (email, password, firstName, lastName, isSignUp) => {
+    const userDetails = {
+        email: email.trim(),
+        password: password,
+        firstName: firstName.trim(),
+        lastName: lastName.trim()
+    }
+    return dispatch => {
+        dispatch(authStart());
+        if (isSignUp) {
+            firebase.auth().createUserWithEmailAndPassword(userDetails.email, userDetails.password)
+                .then(firebaseUser => {
+                    firebase.database().ref('Users/' + firebaseUser.user.uid).set(userDetails);
+                    firebase.database().ref('Trainings/' + firebaseUser.user.uid).push(
+                        {trainingsData}
+                    );
+                    massageAfterSignUp(dispatch, firebaseUser, firstName, lastName);
+                })
+                .catch(error => {
+                    dispatch(authFail(error.message));
+                    massageAuthError();
+                });
+        } else {
+            firebase.auth().signInWithEmailAndPassword(userDetails.email, userDetails.password)
+                .then(firebaseUser => {
+                    onSuccessfulAuth(dispatch, firebaseUser)
+                })
+                .catch(function (error) {
+                    dispatch(authFail(error.message));
+                    massageAuthError();
+                });
+        }
+    };
+};
+
 

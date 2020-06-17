@@ -36,38 +36,42 @@ const CounterDown = props => {
     let activeTimer = window.innerWidth / 1.5;
     let nonActiveTimer = window.innerWidth / 1.5;
     if (activeTimer > 670 || nonActiveTimer > 670) {
-        activeTimer = 670; nonActiveTimer = 670
+        activeTimer = 670;
+        nonActiveTimer = 670
     }
-    console.log();
+
     const [currentPlay, setCurrentPlay] = useState({1: false, 2: false, 3: false});
     const [isButtonsDisable, setIsButtonsDisable] = useState(false)
     const myRef = useRef([]);
 
     const onFinishAllTimers = () => {
         MySwal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
+            title: 'Did you finish successfully?',
+            text: `${props.timers.map(elem => elem.name).join(' + ')}`,
+            icon: 'question',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, cancel!',
+            confirmButtonText: 'Yes!',
+            cancelButtonText: 'No',
             reverseButtons: true
         }).then((result) => {
             if (result.value) {
-                window.scrollTo({
-                    top: 0,
-                    left: 0,
-                    behavior: 'smooth'
-                });
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                MySwal.fire(
-                    'Cancelled',
-                    'Your imaginary file is safe :)',
-                    'error'
-                )
+                MySwal.fire({
+                        title: 'Well done!',
+                        text: 'Don\'t forget the next workout tomorrow',
+                        icon: 'success',
+                    }
+                ).then(value => {
+                    props.finishedTraining();
+                })
+            } else {
+                MySwal.fire({
+                        title: 'You are great!',
+                        text: 'Try tomorrow, you sure will succeed :)',
+                        icon: 'info',
+                    }
+                ).then(value => {
+                 props.cancelTraining();
+                })
             }
         })
     }
@@ -89,10 +93,6 @@ const CounterDown = props => {
         onTimerCompletedHandler(0);
     }
 
-    const onStopTimerButtonHandler = () => {
-
-    }
-
     return (
         <div className={classes.TimerWrapper}>
             <div>
@@ -101,7 +101,7 @@ const CounterDown = props => {
                         onClick={onStartTimerButtonHandler}>Start</Button>
                 <Button disabled={isButtonsDisable} style={{color: "#000", backgroundColor: "#b3e5fc"}}
                         variant='contained'
-                        onClick={onStopTimerButtonHandler}>Stop</Button>
+                        onClick={props.cancelTraining}>ABORT!</Button>
             </div>
             <div className={classes.Timers}>
                 {props.timers.map(item => {
