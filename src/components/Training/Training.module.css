@@ -59,6 +59,20 @@
     background-color: rgba(174, 221, 243, 0.58);
 }
 
+.ItemEnter {
+    opacity: 0;
+}
+.ItemEnterActive {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+}
+.ItemExit {
+    opacity: 1;
+}
+.ItemExitActive {
+    transition: opacity 500ms ease-in;
+}
+
 @media only screen and (max-width: 600px) {
     body {
         font-size: 60%

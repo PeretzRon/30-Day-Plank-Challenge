@@ -7,9 +7,12 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {connect} from 'react-redux';
 import classes from './Trainings.module.css'
 import CounterDownControl from "../../components/CounterDownControl/CounterDownControl";
+import TransitionGroup from "react-transition-group/TransitionGroup";
+import CSSTransition from "react-transition-group/CSSTransition";
+import '../../Effects.css'
+
 
 const scrollToRef = (ref) => {
-    // window.scrollTo({top: ref.current.offsetTop, behavior: 'smooth'})
     ref.current.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
@@ -26,6 +29,7 @@ const Trainings = props => {
     const myRef = useRef();
     const starCountRef = firebase.database().ref();
 
+
     useEffect(() => {
         starCountRef.child(`Trainings/${props.userId}/`).on("value", snap => {
             const final = Object.values(Object.values(snap.val())[0])[0];
@@ -34,12 +38,14 @@ const Trainings = props => {
             final.forEach(item => item.isCompleted ? completed.push(item) : unCompleted.push(item));
             setUserUnDoneTrainings(unCompleted)
             SetUserDoneTrainings(completed)
+
         });
 
         starCountRef.child('TrainingsData').once("value", snap => {
             const allTrainings = Object.values(Object.values(snap.val()));
             setTrainingsData(allTrainings);
             window.scrollTo(0, 0);
+
         });
     }, [props.userId, starCountRef])
 
@@ -124,7 +130,7 @@ const Trainings = props => {
     if ((userUnDoneTrainings.length === 0 && userDoneTrainings.length === 0)) {
         data = <div className={classes.PageHeight}>
             <div className={classes.Center}>
-                <CircularProgress size={'10rem'}/>
+                <CircularProgress size={'10rem'} style={{color: '#ac9e9e'}} />
             </div>
         </div>
     } else {
@@ -132,25 +138,35 @@ const Trainings = props => {
             <div className={classes.TrainingsWrapper}>
                 <section>
                     <p className={classes.Title}>Active Exercises</p>
-                    <div className={classes.Trainings}>
+                    <TransitionGroup className={classes.Trainings}>
                         {userUnDoneTrainings.map(training => {
-                            return <Training key={training.id} action={training.name} day={training.id}
-                                             isCompleted={training.isCompleted}
-                                             duration={training.duration}
-                                             startAction={() => startActionHandler(training)}
-                                             completed={(event) => completedHandler(event, training.id)}/>
+                            return <CSSTransition
+                                key={training.id}
+                                timeout={370}
+                                classNames='item'>
+                                <Training action={training.name} day={training.id}
+                                          isCompleted={training.isCompleted}
+                                          duration={training.duration}
+                                          startAction={() => startActionHandler(training)}
+                                          completed={(event) => completedHandler(event, training.id)}/>
+                            </CSSTransition>
                         })}
-                    </div>
+                    </TransitionGroup>
                 </section>
                 <section>
                     <p className={classes.Title}>Finished Exercises</p>
-                    <div className={classes.Trainings}>
+                    <TransitionGroup className={classes.Trainings}>
                         {userDoneTrainings.map(training => {
-                            return <Training key={training.id} action={training.name} day={training.id}
-                                             isCompleted={training.isCompleted}
-                                             completed={(event) => completedHandler(event, training.id)}/>
+                            return <CSSTransition
+                                key={training.id}
+                                timeout={370}
+                                classNames='item'>
+                                <Training key={training.id} action={training.name} day={training.id}
+                                          isCompleted={training.isCompleted}
+                                          completed={(event) => completedHandler(event, training.id)}/>
+                            </CSSTransition>
                         })}
-                    </div>
+                    </TransitionGroup>
                 </section>
                 {isCounterDown &&
                 <div ref={myRef} className={classes.CounterDownSection}>
@@ -160,7 +176,6 @@ const Trainings = props => {
                 }
             </div>
     }
-
 
     return (
         <div>

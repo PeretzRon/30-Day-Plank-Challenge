@@ -21,12 +21,15 @@
     max-width: 90%;
 }
 
+.ScrollItem {
+    counter-increment: list;
+}
+
 .Item {
     text-align: left;
     display: block;
     margin-right: 10px;
     clear: both;
-    counter-increment: list;
     padding-bottom: 4rem;
     font-size: 1.1rem;
     line-height: 1.375;

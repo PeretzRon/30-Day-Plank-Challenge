@@ -2,6 +2,8 @@ import React, {useRef, useState} from "react";
 import {CountdownCircleTimer} from "react-countdown-circle-timer";
 import classes from './CounterDown.module.css';
 import Button from "@material-ui/core/Button";
+import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
+import PlayCircleFilledWhiteOutlinedIcon from '@material-ui/icons/PlayCircleFilledWhiteOutlined';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
@@ -57,7 +59,6 @@ const CounterDown = props => {
             if (result.value) {
                 MySwal.fire({
                         title: 'Well done!',
-                        text: 'Don\'t forget the next workout tomorrow',
                         icon: 'success',
                     }
                 ).then(value => {
@@ -96,11 +97,13 @@ const CounterDown = props => {
     return (
         <div className={classes.TimerWrapper}>
             <div>
-                <Button disabled={isButtonsDisable} style={{color: "#000", backgroundColor: "#03a9f4"}}
-                        variant='contained'
+                <Button disabled={isButtonsDisable} style={{color: "#000", backgroundColor: "#dbdfe2"}}
+                        variant="outlined"
+                        startIcon={<PlayCircleFilledWhiteOutlinedIcon/>}
                         onClick={onStartTimerButtonHandler}>Start</Button>
-                <Button disabled={isButtonsDisable} style={{color: "#000", backgroundColor: "#b3e5fc"}}
-                        variant='contained'
+                <Button disabled={isButtonsDisable} style={{color: "#000", backgroundColor: "#dbdfe2"}}
+                        variant="outlined"
+                        startIcon={<CancelOutlinedIcon/>}
                         onClick={props.cancelTraining}>ABORT!</Button>
             </div>
             <div className={classes.Timers}>
@@ -110,7 +113,7 @@ const CounterDown = props => {
                             isPlaying={currentPlay[item.id]}
                             duration={item.duration}
                             size={currentPlay[item.id] ? activeTimer : nonActiveTimer}
-                            colors={[["#0985bf", 0.33], ["#03a9f4", 0.33], ["#b3e5fc"]]}
+                            colors={[["#2c5d74", 0.33], ["#1a729c", 0.33], ["#2786b1"]]}
                             onComplete={() => onTimerCompletedHandler(item.id)}
                         >
                             {({remainingTime}) =>

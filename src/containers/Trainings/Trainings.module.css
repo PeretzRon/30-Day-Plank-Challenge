@@ -5,7 +5,8 @@
 .Trainings {
     display: flex;
     justify-content: center;
-    flex-direction: column;
+    flex-direction: row;
+    flex-flow: wrap;
     text-align: center;
 
 }
@@ -19,7 +20,7 @@
 }
 
 .Title {
-    font-size: 300%;
+    font-size: 4rem;
     font-family: 'Anton', serif;
     margin-left: 20px;
     letter-spacing: 2px;
@@ -35,4 +36,11 @@
 
 .PageHeight {
     height: 200vh;
+}
+
+@media only screen and (max-width: 599px) {
+    .Title {
+        font-size: 3rem;
+        padding-top: 20px;
+    }
 }

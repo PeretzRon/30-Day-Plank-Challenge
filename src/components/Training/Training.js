@@ -1,97 +1,110 @@
 import React from "react";
-import classes from './Training.module.css'
-import Button from "@material-ui/core/Button";
+// import classes from './Training.module.css'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import DoneIcon from '@material-ui/icons/Done';
 import ReplayIcon from '@material-ui/icons/Replay';
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import Card from '@material-ui/core/Card';
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import {makeStyles} from '@material-ui/core/styles';
+import CardActions from "@material-ui/core/CardActions";
 
-
-const UseStylesDoneBtn = makeStyles((theme) => ({
+const UseStyles = makeStyles({
     root: {
-        padding: theme.spacing(1),
-        [theme.breakpoints.down('xs')]: {
-            color: "#000", backgroundColor: "#b3e5fc",
-            height: '70%',
-            width: '70%',
-            fontSize: 'inherit',
-        },
-        [theme.breakpoints.up('sm')]: {
-            color: "#000", backgroundColor: "#b3e5fc",
-        }
+        width: 330,
+        backgroundColor: '#efeff6bf',
+        margin: '10px',
+        textAlign: 'center',
+        border: '1px solid #ccc'
     },
-}));
+    media: {
+        height: 140,
+    },
+    header: {
+        textAlign: 'center',
+    },
+    day: {
+        fontFamily: `"Anton", sans-serif`,
+        color: 'gray',
+        transform: 'translateY(30px)',
+    },
+    actionName: {
+        fontFamily: `"Lato", sans-serif`,
+        fontSize: '1.2rem',
+        color: 'black',
+        fontWeight: "bold",
+        whiteSpace: 'pre-line',
 
-const UseStylesStartBtn = makeStyles((theme) => ({
-    root: {
-        padding: theme.spacing(1),
-        [theme.breakpoints.down('xs')]: {
-            color: "#000", backgroundColor: "#03a9f4",
-            height: '70%',
-            width: '70%',
-            fontSize: 'inherit',
-        },
-        [theme.breakpoints.up('sm')]: {
-            color: "#000", backgroundColor: "#03a9f4",
-        }
     },
-}));
+    lineCross: {
+        textDecoration: 'line-through',
+    },
+    headerWrapper: {
+        backgroundColor: '#fff',
+
+    }
+});
 
 const training = props => {
-    const classesStyleDoneBtn = UseStylesDoneBtn();
-    const classesStyleStartBtn = UseStylesStartBtn();
-    const styleTraining = [classes.Training];
+    // const classesStyleDoneBtn = UseStylesDoneBtn();
+    // const classesStyleStartBtn = UseStylesStartBtn();
+    const classes = UseStyles();
+
+    // const styleTraining = [classes.Training];
     let isCompletedStyle = ""
     if (props.isCompleted) {
-        styleTraining.push(classes.CompletedBackGround);
-        isCompletedStyle = classes.Completed;
+        // styleTraining.push(classes.lineCross);
+        isCompletedStyle = classes.lineCross;
     }
+
+
     let title = null
     if (props.action) {
-        title = props.action.split('+').map(row => {
-            return (
-                <div key={row}>
-                    <p>{row}</p>
-                </div>
-            )
-        })
+        title = <p className={[classes.actionName, isCompletedStyle].join(' ')}>{props.action}</p>
     }
 
     return (
-        <div className={styleTraining.join(" ")}>
-            <div className={[classes.Day, isCompletedStyle].join(" ")}>
-                <h1>Day {props.day}</h1>
-            </div>
-            <div className={[classes.Title, isCompletedStyle].join(" ")}>
-                <div>{title}</div>
-            </div>
-            <div className={classes.Action}>
-                <div className={classes.Btn} id={props.isCompleted ? 'UNDONE' : 'DONE'} onClick={props.completed}>
-                    <Button
-                        className={classesStyleDoneBtn.root}
-                        size="medium"
-                        variant="contained"
-                        startIcon={props.isCompleted ? <ReplayIcon/> : <DoneIcon/>}
-                        color="secondary"
-                    >
-                        {props.isCompleted ? 'UNDONE' : 'DONE'}
-                    </Button>
-                </div>
-
-                <div className={classes.Btn}>
-                    {!props.isCompleted && <Button className={classesStyleStartBtn.root}
-                                                   onClick={props.startAction}
-                                                   variant="contained"
-                                                   color="primary"
-                                                   size="medium"
-                                                   startIcon={<PlayArrowIcon/>}
-                    >
-                        START!
-                    </Button>}
-                </div>
-            </div>
-        </div>
-
+        <Card className={classes.root}>
+            <CardActionArea className={classes.headerWrapper}>
+                <CardContent className={classes.header}>
+                    <Typography className={[classes.day, isCompletedStyle].join(' ')} gutterBottom variant="h3"
+                                component="h2">
+                        Day {props.day}
+                    </Typography>
+                </CardContent>
+                <CardContent>
+                    {/*<Typography gutterBottom variant="h5" component="h2">*/}
+                    {/*   */}
+                    {/*</Typography>*/}
+                    <Typography variant="body2"
+                                color="textSecondary" component="div">
+                        {title}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+            <CardActions style={{height: '40px'}}>
+                <Button startIcon={props.isCompleted ? <ReplayIcon/> : <DoneIcon/>}
+                        id={props.isCompleted ? 'UNDONE' : 'DONE'}
+                        onClick={props.completed}
+                        style={{color: '#000', border: '1px solid #000'}}
+                        variant="outlined"
+                        size="small"
+                        color="primary">
+                    {props.isCompleted ? 'UNDONE' : 'DONE'}
+                </Button>
+                {!props.isCompleted && <Button
+                    style={{color: '#000', border: '1px solid #000'}}
+                    startIcon={<PlayArrowIcon/>}
+                    onClick={props.startAction}
+                    variant="outlined"
+                    size="small"
+                    color="primary">
+                    Start
+                </Button>}
+            </CardActions>
+        </Card>
     )
 }
 

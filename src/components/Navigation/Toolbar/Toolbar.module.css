@@ -4,7 +4,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-image: linear-gradient(to right bottom, rgba(96, 190, 220, 1), rgb(0, 63, 82));
+    background-image: linear-gradient(to right bottom, rgb(152, 152, 152), rgb(47, 52, 61));
     display: flex;
     justify-content: space-between;
     align-items: center;
