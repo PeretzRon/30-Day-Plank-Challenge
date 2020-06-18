@@ -32,10 +32,13 @@ const UseStyles = makeStyles({
     },
     actionName: {
         fontFamily: `"Lato", sans-serif`,
-        fontSize: '1.2rem',
+        fontSize: '1.1rem',
         color: 'black',
         fontWeight: "bold",
-        whiteSpace: 'pre-line',
+        minHeight: '80px',
+        display: "flex",
+        justifyContent: 'center',
+        alignItems: 'center',
 
     },
     lineCross: {

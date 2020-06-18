@@ -139,7 +139,7 @@ const Trainings = props => {
                 <section>
                     <p className={classes.Title}>Active Exercises</p>
                     <TransitionGroup className={classes.Trainings}>
-                        {userUnDoneTrainings.map(training => {
+                        {userUnDoneTrainings.slice(0,10).map(training => {
                             return <CSSTransition
                                 key={training.id}
                                 timeout={370}

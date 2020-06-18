@@ -3,6 +3,7 @@ import * as actionTypes from './actionTypes';
 import firebase from 'firebase/app';
 import withReactContent from 'sweetalert2-react-content'
 import Swal from "sweetalert2";
+import {ErrorCodeFirebase} from "../../Error/Error";
 
 
 export const authStart = () => {
@@ -73,17 +74,17 @@ const massageAfterSignUp = (dispatch, data, firstName, lastName) => {
         onSuccessfulAuth(dispatch, data)
     })
 }
-const massageAuthError = () => {
+const massageAuthError = (errorCode) => {
     const MySwal = withReactContent(Swal)
+    const error = ErrorCodeFirebase[errorCode]
     MySwal.fire({
         title: `Oops...`,
-        text: `Something went wrong!`,
+        text: `${error ? error :"Unknown error" }`,
         icon: 'error',
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Try Again'
     })
 }
-
 
 
 export const setAuthRedirectPath = (path) => {
@@ -131,7 +132,8 @@ export const auth = (email, password, firstName, lastName, isSignUp) => {
                 })
                 .catch(error => {
                     dispatch(authFail(error.message));
-                    massageAuthError();
+                    massageAuthError(error.code);
+                    console.log(error.code);
                 });
         } else {
             firebase.auth().signInWithEmailAndPassword(userDetails.email, userDetails.password)
@@ -140,7 +142,8 @@ export const auth = (email, password, firstName, lastName, isSignUp) => {
                 })
                 .catch(function (error) {
                     dispatch(authFail(error.message));
-                    massageAuthError();
+                    massageAuthError(error.code);
+                    console.log(error.code);
                 });
         }
     };

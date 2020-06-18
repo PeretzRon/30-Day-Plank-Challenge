@@ -15,6 +15,10 @@ import * as actions from '../../store/actions/index';
 import {Redirect} from "react-router-dom";
 import classes from './Auth.module.css';
 import LinearProgress from "@material-ui/core/LinearProgress";
+import firebase from 'firebase/app';
+import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2";
+import {ErrorCodeFirebase} from "../../Error/Error";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -61,6 +65,25 @@ const Auth = props => {
         setPassword("");
     }
 
+    const onForgotPasswordHandler = async () => {
+        const MySwal = withReactContent(Swal)
+        const auth = firebase.auth();
+        const {value: email} = await Swal.fire({
+            title: 'Input email address',
+            input: 'email',
+            inputPlaceholder: 'Enter your email address'
+        })
+        if (email) {
+            auth.sendPasswordResetEmail(email).then(function () {
+                MySwal.fire('Good job!', 'Please check your inbox, an email is on the way ', 'success');
+            }).catch(function (error) {
+                console.log(error);
+                MySwal.fire('Oops...', `${ErrorCodeFirebase[error.code] ? ErrorCodeFirebase[error.code] : "something went wrong"}`, 'error');
+            });
+        }
+
+    }
+
     let spinner = props.loading ? <div className={classesUI.form}><LinearProgress/></div> : null
     let authPage = null;
     if (isSignUp) {
@@ -73,7 +96,7 @@ const Auth = props => {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <form className={classesUI.form} noValidate onSubmit={onSubmitHandler}>
+                <form className={classesUI.form} onSubmit={onSubmitHandler}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -162,7 +185,7 @@ const Auth = props => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classesUI.form} noValidate onSubmit={onSubmitHandler}>
+                <form className={classesUI.form} onSubmit={onSubmitHandler}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -199,7 +222,7 @@ const Auth = props => {
 
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#" variant="body2">
+                            <Link onClick={onForgotPasswordHandler} variant="body2">
                                 Forgot password?
                             </Link>
                         </Grid>
