@@ -1,17 +1,17 @@
 .NavigationItem {
-    margin: 10px 0;
+    margin: 15px 0;
     box-sizing: border-box;
     display: block;
     width: 100%;
 }
 
 .NavigationItem a {
-    color: #40A4C8;
+    color: #000;
     text-decoration: none;
     width: 100%;
     box-sizing: border-box;
     display: block;
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 
 .NavigationItem a:hover,
@@ -34,6 +34,7 @@
         height: 100%;
         padding: 16px 10px;
         border-bottom: 4px solid transparent;
+        font-size: 1rem;
     }
 
     .NavigationItem a:hover{

@@ -77,7 +77,6 @@ const Auth = props => {
             auth.sendPasswordResetEmail(email).then(function () {
                 MySwal.fire('Good job!', 'Please check your inbox, an email is on the way ', 'success');
             }).catch(function (error) {
-                console.log(error);
                 MySwal.fire('Oops...', `${ErrorCodeFirebase[error.code] ? ErrorCodeFirebase[error.code] : "something went wrong"}`, 'error');
             });
         }
