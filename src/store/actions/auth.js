@@ -133,6 +133,7 @@ export const auth = (email, password, firstName, lastName, isSignUp) => {
                 .catch(error => {
                     dispatch(authFail(error.message));
                     massageAuthError(error.code);
+                    console.log(error);
                 });
         } else {
             firebase.auth().signInWithEmailAndPassword(userDetails.email, userDetails.password)

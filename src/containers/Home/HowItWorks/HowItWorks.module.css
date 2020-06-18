@@ -36,14 +36,3 @@
     }
 
 }
-
-@media only screen and (max-width: 599px) {
-    .SectionHeader {
-        font-size: 1rem;
-    }
-    .Simple {
-        font-size: 0.8em;
-    }
-
-}
-

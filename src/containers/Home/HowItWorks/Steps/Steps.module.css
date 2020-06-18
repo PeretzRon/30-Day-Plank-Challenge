@@ -76,3 +76,13 @@
     margin: 0 0 1rem 0;
     font: normal 2rem var(--font-head);
 }
+
+@media only screen and (max-width: 599px) {
+    .Item h2 {
+       font-size: 1.7rem;
+    }
+
+    .Item span {
+            font-size: 1rem;
+    }
+}
