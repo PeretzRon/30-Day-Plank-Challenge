@@ -6,6 +6,7 @@ import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import PlayCircleFilledWhiteOutlinedIcon from '@material-ui/icons/PlayCircleFilledWhiteOutlined';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import soundGong from '../../../resources/sound/harp-strum-sound-effect.mp3';
 
 const RenderTime = (type, time) => {
 
@@ -47,6 +48,8 @@ const CounterDown = props => {
     const myRef = useRef([]);
 
     const onFinishAllTimers = () => {
+        const audio = new Audio(soundGong)
+        audio.play();
         MySwal.fire({
             title: 'Did you finish successfully?',
             text: `${props.timers.map(elem => elem.name).join(' + ')}`,
@@ -56,12 +59,13 @@ const CounterDown = props => {
             cancelButtonText: 'No',
             reverseButtons: true
         }).then((result) => {
+            audio.pause();
             if (result.value) {
                 MySwal.fire({
                         title: 'Well done!',
                         icon: 'success',
                     }
-                ).then(value => {
+                ).then(() => {
                     props.finishedTraining();
                 })
             } else {
@@ -70,7 +74,7 @@ const CounterDown = props => {
                         text: 'Try tomorrow, you sure will succeed :)',
                         icon: 'info',
                     }
-                ).then(value => {
+                ).then(() => {
                  props.cancelTraining();
                 })
             }

@@ -51,17 +51,11 @@ const UseStyles = makeStyles({
 });
 
 const training = props => {
-    // const classesStyleDoneBtn = UseStylesDoneBtn();
-    // const classesStyleStartBtn = UseStylesStartBtn();
     const classes = UseStyles();
-
-    // const styleTraining = [classes.Training];
     let isCompletedStyle = ""
     if (props.isCompleted) {
-        // styleTraining.push(classes.lineCross);
         isCompletedStyle = classes.lineCross;
     }
-
 
     let title = null
     if (props.action) {
@@ -98,7 +92,7 @@ const training = props => {
                     {props.isCompleted ? 'UNDONE' : 'DONE'}
                 </Button>
                 {!props.isCompleted && <Button
-                    style={{color: '#000', border: '1px solid #000'}}
+                    style={{color: '#000', border: '1px solid #000',  backgroundColor: '#f6f1f1'}}
                     startIcon={<PlayArrowIcon/>}
                     onClick={props.startAction}
                     variant="outlined"
