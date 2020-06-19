@@ -12,7 +12,6 @@
 }
 
 .HeadingPrimary {
-    font-family: 'Exo', serif;
     position: absolute;
     top: 30%;
     left: 50%;
@@ -24,11 +23,11 @@
 
 .HeadingPrimaryMain {
     display: block;
+    font-family: 'Exo', serif;
     font-size: 3.4rem;
     font-weight: 300;
     letter-spacing: 18px;
     text-transform: uppercase;
-
     animation: moveRight 700ms ease-out;
 }
 

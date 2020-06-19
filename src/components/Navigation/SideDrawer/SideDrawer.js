@@ -13,9 +13,7 @@ const sideDrawer = ( props ) => {
         <React.Fragment>
             <Backdrop show={props.open} clicked={props.closed}/>
             <div className={attachedClasses.join(' ')} onClick={props.closed}>
-                {/*<div className={classes.Logo}>*/}
-                {/*    /!*<Logo />*!/*/}
-                {/*</div>*/}
+                <img className={classes.Logo} src={require('../../../resources/img/logo.png')} alt='logo'/>
                 <nav>
                     <NavigationItems isAuthenticated={props.isAuth} />
                 </nav>

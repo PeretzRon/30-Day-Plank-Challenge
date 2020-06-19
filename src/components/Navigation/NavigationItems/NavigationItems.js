@@ -10,7 +10,7 @@ const navigationItems = (props) => (
     <ul className={classes.NavigationItems}>
         <NavigationItem link="/" exact> <HomeOutlinedIcon className={classes.Icon}/>Home</NavigationItem>
         {props.isAuthenticated ? <NavigationItem link="/trainings"> <SportsHandballOutlinedIcon
-            className={classes.Icon}/>Training</NavigationItem> : null}
+            className={classes.Icon}/>Trainings</NavigationItem> : null}
         {!props.isAuthenticated
             ? <NavigationItem link="/auth"> <LockOutlinedIcon className={classes.Icon}/>Login</NavigationItem>
             : <NavigationItem link="/logout"> <LockOpenOutlinedIcon className={classes.Icon}/>Logout</NavigationItem>}

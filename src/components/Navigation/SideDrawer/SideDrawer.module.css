@@ -11,6 +11,8 @@
     padding: 32px 16px;
     box-sizing: border-box;
     transition: transform 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
 }
 
 @media (min-width: 600px) {
@@ -28,6 +30,7 @@
 }
 
 .Logo {
-    height: 11%;
-    margin-bottom: 32px;
+    height: 7%;
+    margin: 0 auto 30px auto;
+    backface-visibility: hidden;
 }

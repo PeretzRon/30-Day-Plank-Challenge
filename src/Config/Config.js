@@ -26,4 +26,59 @@ export const trainingsData = {
         isCompleted: false,
         type: ['p', 'wp', 'sp']
     },
+    22: {
+        id: 22,
+        name: '70 Sec Plank + 35 Sec Walking Plank + 15 Sec Superman Plank',
+        isCompleted: false,
+        type: ['p', 'wp', 'sp']
+    },
+    23: {
+        id: 23,
+        name: '70 Sec Plank + 35 Sec Walking Plank + 20 Sec Superman Plank',
+        isCompleted: false,
+        type: ['p', 'wp', 'sp']
+    },
+    24: {
+        id: 24,
+        name: '75 Sec Plank + 35 Sec Walking Plank + 20 Sec Superman Plank',
+        isCompleted: false,
+        type: ['p', 'wp', 'sp']
+    },
+    25: {
+        id: 25,
+        name: '75 Sec Plank + 40 Sec Walking Plank + 20 Sec Superman Plank',
+        isCompleted: false,
+        type: ['p', 'wp', 'sp']
+    },
+    26: {
+        id: 26,
+        name: '80 Sec Plank + 40 Sec Walking Plank + 20 Sec Superman Plank',
+        isCompleted: false,
+        type: ['p', 'wp', 'sp']
+    },
+    27: {
+        id: 27,
+        name: '80 Sec Plank + 40 Sec Walking Plank + 25 Sec Superman Plank',
+        isCompleted: false,
+        type: ['p', 'wp', 'sp']
+    },
+    28: {
+        id: 28,
+        name: '85 Sec Plank + 45 Sec Walking Plank + 25 Sec Superman Plank',
+        isCompleted: false,
+        type: ['p', 'wp', 'sp']
+    },
+    29: {
+        id: 29,
+        name: '90 Sec Plank + 45 Sec Walking Plank + 39 Sec Superman Plank',
+        isCompleted: false,
+        type: ['p', 'wp', 'sp']
+    },
+    30: {
+        id: 30,
+        name: '3 Min Plank',
+        isCompleted: false,
+        type: ['p']
+    },
+
 }

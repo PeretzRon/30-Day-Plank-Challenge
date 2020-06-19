@@ -126,7 +126,7 @@ const Trainings = props => {
         completedHandler(null, selectedTraining[0].TrainingID, 'DONE')
     };
 
-    let data = null
+    let data;
     if ((userUnDoneTrainings.length === 0 && userDoneTrainings.length === 0)) {
         data = <div className={classes.PageHeight}>
             <div className={classes.Center}>
@@ -139,7 +139,7 @@ const Trainings = props => {
                 <section>
                     <p className={classes.Title}>Active Exercises</p>
                     <TransitionGroup className={classes.Trainings}>
-                        {userUnDoneTrainings.slice(0,10).map(training => {
+                        {userUnDoneTrainings.map(training => {
                             return <CSSTransition
                                 key={training.id}
                                 timeout={370}
@@ -154,19 +154,21 @@ const Trainings = props => {
                     </TransitionGroup>
                 </section>
                 <section>
-                    <p className={classes.Title}>Finished Exercises</p>
-                    <TransitionGroup className={classes.Trainings}>
-                        {userDoneTrainings.map(training => {
-                            return <CSSTransition
-                                key={training.id}
-                                timeout={370}
-                                classNames='item'>
-                                <Training key={training.id} action={training.name} day={training.id}
-                                          isCompleted={training.isCompleted}
-                                          completed={(event) => completedHandler(event, training.id)}/>
-                            </CSSTransition>
-                        })}
-                    </TransitionGroup>
+                    {userDoneTrainings.length !== 0 && <React.Fragment>
+                        <p className={classes.Title}>Finished Exercises</p>
+                        <TransitionGroup className={classes.Trainings}>
+                            {userDoneTrainings.map(training => {
+                                return <CSSTransition
+                                    key={training.id}
+                                    timeout={370}
+                                    classNames='item'>
+                                    <Training key={training.id} action={training.name} day={training.id}
+                                              isCompleted={training.isCompleted}
+                                              completed={(event) => completedHandler(event, training.id)}/>
+                                </CSSTransition>
+                            })}
+                        </TransitionGroup>
+                    </React.Fragment>}
                 </section>
                 {isCounterDown &&
                 <div ref={myRef} className={classes.CounterDownSection}>

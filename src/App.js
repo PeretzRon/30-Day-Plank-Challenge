@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 // import logo from './logo.svg';
 import Layout from "./hoc/Layout/Layout";
-import {Route, Switch, withRouter} from 'react-router-dom';
+import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import Trainings from "./containers/Trainings/Trainings";
 import Auth from './containers/Auth/Auth'
 import Home from "./containers/Home/Home";
@@ -19,14 +19,16 @@ const App = props => {
     if (props.isAuthenticated) {
         routes = <Switch>
             <Route path='/auth' component={Auth}/>
-            <Route path='/trainings' component={Trainings}/>
+            <Route path='/trainings' exact  component={Trainings}/>
             <Route path="/logout" component={Logout}/>
-            <Route path="/" component={Home}/>
+            <Route path="/" exact component={Home}/>
+            <Redirect to="/" />
         </Switch>
     } else {
         routes = <Switch>
             <Route path='/auth' component={Auth}/>
-            <Route path="/" component={Home}/>
+            <Route path="/"  exact component={Home}/>
+            <Redirect to="/" />
         </Switch>
     }
 
