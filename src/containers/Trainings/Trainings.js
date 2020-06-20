@@ -21,16 +21,17 @@ const scrollToRef = (ref) => {
 }
 
 const Trainings = props => {
-    const [trainingsData, setTrainingsData] = useState([])
-    const [userUnDoneTrainings, setUserUnDoneTrainings] = useState([])
-    const [userDoneTrainings, SetUserDoneTrainings] = useState([]);
-    const [isCounterDown, setIsCounterDown] = useState(false);
+    const [trainingsData, setTrainingsData] = useState([]) // global trainings data
+    const [userUnDoneTrainings, setUserUnDoneTrainings] = useState([]) // user unFinished Trainings
+    const [userDoneTrainings, SetUserDoneTrainings] = useState([]);  // user finished Trainings
+    const [isCounterDown, setIsCounterDown] = useState(false); // show or hide counterDown
     const [selectedTraining, setSelectedTraining] = useState([]);
     const myRef = useRef();
     const starCountRef = firebase.database().ref();
 
 
     useEffect(() => {
+        // set listener for update in user trainings
         starCountRef.child(`Trainings/${props.userId}/`).on("value", snap => {
             const final = Object.values(Object.values(snap.val())[0])[0];
             const completed = []
@@ -41,6 +42,7 @@ const Trainings = props => {
 
         });
 
+        // get global trainings data from firebase
         starCountRef.child('TrainingsData').once("value", snap => {
             const allTrainings = Object.values(Object.values(snap.val()));
             setTrainingsData(allTrainings);
@@ -50,6 +52,7 @@ const Trainings = props => {
     }, [props.userId, starCountRef])
 
 
+    // cleanup listener when the component unmount
     useEffect(() => {
         const unMountFunc = () => {
             starCountRef.child(`Trainings/${props.userId}/`).off('value');
@@ -57,7 +60,23 @@ const Trainings = props => {
         return () => unMountFunc();
     }, [props.userId, starCountRef])
 
-    const completedHandler = (event, id, target = null) => {
+
+    const onButtonDoneOrUndoneHandler = (event, id, target = null) => {
+
+        // This function remove from one array and add to second array
+        // then update the state of UndoneTraining data and doneTraining.
+        const updateUI = (data, id, status, arrayTrainingType, updateStateAfterRemove, updateStateAfterAdd) => {
+            const currentTrainingsData = [...data];
+            const indexCompleted = currentTrainingsData.findIndex(value => value.id === id);
+            const Obj = currentTrainingsData.splice(indexCompleted, 1);
+            Obj[0].isCompleted = status;
+            const currentTrainings = [...arrayTrainingType];
+            currentTrainings.push(Obj[0]);
+            currentTrainingsData.sort((a, b) => a.id - b.id);
+            updateStateAfterRemove(currentTrainingsData);
+            currentTrainings.sort((a, b) => a.id - b.id);
+            updateStateAfterAdd(currentTrainings);
+        }
         let currentTarget;
         if (event) {
             event.preventDefault();
@@ -66,48 +85,32 @@ const Trainings = props => {
             currentTarget = target;
         }
 
+        // update data on firebase
+        const updateServer = (status) => {
+            firebase.database().ref().child(`Trainings/${props.userId}`).once('value', function (snapshot) {
+                const subKey = Object.keys(snapshot.val()).pop();
+                firebase.database().ref(`Trainings/${props.userId}/${subKey}`).child('trainingsData').child(id).update({isCompleted: status})
+            })
+        }
+
         switch (currentTarget) {
             case 'DONE' :
-                const currentTrainingsData = [...userUnDoneTrainings];
-                const indexCompleted = currentTrainingsData.findIndex(value => value.id === id);
-                const Obj = currentTrainingsData.splice(indexCompleted, 1);
-                Obj[0].isCompleted = true;
-                const currentTrainingsDataCompleted = [...userDoneTrainings];
-                currentTrainingsDataCompleted.push(Obj[0]);
-                currentTrainingsData.sort((a, b) => a.id - b.id);
-                setUserUnDoneTrainings(currentTrainingsData);
-                currentTrainingsDataCompleted.sort((a, b) => a.id - b.id);
-                SetUserDoneTrainings(currentTrainingsDataCompleted);
-
-                firebase.database().ref().child(`Trainings/${props.userId}`).once('value', function (snapshot) {
-                    const subKey = Object.keys(snapshot.val()).pop();
-                    firebase.database().ref(`Trainings/${props.userId}/${subKey}`).child('trainingsData').child(id).update({isCompleted: true})
-                });
+                updateUI(userUnDoneTrainings, id, true, userDoneTrainings, setUserUnDoneTrainings, SetUserDoneTrainings);
+                updateServer(true);
                 break;
             case 'UNDONE':
-                const currentTrainingsDataCompleted1 = [...userDoneTrainings];
-                const index = currentTrainingsDataCompleted1.findIndex(value => value.id === id);
-                const Obj1 = currentTrainingsDataCompleted1.splice(index, 1);
-                Obj1[0].isCompleted = false;
-                const currentTrainingsData1 = [...userUnDoneTrainings];
-                currentTrainingsData1.push(Obj1[0]);
-                currentTrainingsData1.sort((a, b) => a.id - b.id);
-                currentTrainingsDataCompleted1.sort((a, b) => a.id - b.id);
-                setUserUnDoneTrainings(currentTrainingsData1);
-                SetUserDoneTrainings(currentTrainingsDataCompleted1);
-                firebase.database().ref().child(`Trainings/${props.userId}`).once('value', function (snapshot) {
-                    const subKey = Object.keys(snapshot.val()).pop();
-                    firebase.database().ref(`Trainings/${props.userId}/${subKey}`).child('trainingsData').child(id).update({isCompleted: false})
-                });
+                updateUI(userDoneTrainings, id, false, userUnDoneTrainings, SetUserDoneTrainings, setUserUnDoneTrainings);
+                updateServer(false);
                 break;
             default:
                 break;
         }
     }
 
+    // handle with start training
     const startActionHandler = training => {
         const userSelectedTraining = trainingsData[training.id - 1];
-        setSelectedTraining(userSelectedTraining);
+        setSelectedTraining(userSelectedTraining); // update the state for the selected training
         setIsCounterDown(false);
         setTimeout(() => {
             setIsCounterDown(true);
@@ -115,22 +118,24 @@ const Trainings = props => {
         }, 100)
     }
 
+    // handle with stop training button
     const onStopTimerButtonHandler = () => {
         window.scrollTo({top: 0, behavior: "smooth"})
         setIsCounterDown(false)
     }
 
+    // handle when training finish (scroll top page, move the training to finish list)
     const onFinishTraining = () => {
         window.scrollTo({top: 0, behavior: "smooth"})
         setIsCounterDown(false)
-        completedHandler(null, selectedTraining[0].TrainingID, 'DONE')
+        onButtonDoneOrUndoneHandler(null, selectedTraining[0].TrainingID, 'DONE')
     };
 
     let data;
     if ((userUnDoneTrainings.length === 0 && userDoneTrainings.length === 0)) {
         data = <div className={classes.PageHeight}>
             <div className={classes.Center}>
-                <CircularProgress size={'10rem'} style={{color: '#ac9e9e'}} />
+                <CircularProgress size={'10rem'} style={{color: 'rgba(171,210,255,0.78)'}}/>
             </div>
         </div>
     } else {
@@ -148,7 +153,7 @@ const Trainings = props => {
                                           isCompleted={training.isCompleted}
                                           duration={training.duration}
                                           startAction={() => startActionHandler(training)}
-                                          completed={(event) => completedHandler(event, training.id)}/>
+                                          completed={(event) => onButtonDoneOrUndoneHandler(event, training.id)}/>
                             </CSSTransition>
                         })}
                     </TransitionGroup>
@@ -164,7 +169,7 @@ const Trainings = props => {
                                     classNames='item'>
                                     <Training key={training.id} action={training.name} day={training.id}
                                               isCompleted={training.isCompleted}
-                                              completed={(event) => completedHandler(event, training.id)}/>
+                                              completed={(event) => onButtonDoneOrUndoneHandler(event, training.id)}/>
                                 </CSSTransition>
                             })}
                         </TransitionGroup>
@@ -189,11 +194,6 @@ const Trainings = props => {
 
 const mapStateToProps = state => {
     return {
-        loading: state.auth.loading,
-        error: state.auth.error,
-        isAuthenticated: state.auth.token !== null,
-        authRedirectPath: state.auth.authRedirectPath,
-        token: state.auth.token,
         userId: state.auth.userId
     };
 };

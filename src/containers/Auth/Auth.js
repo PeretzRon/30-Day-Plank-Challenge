@@ -21,6 +21,7 @@ import Swal from "sweetalert2";
 import {ErrorCodeFirebase} from "../../Error/Error";
 
 
+// style for materiel UI components
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -44,10 +45,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Auth = props => {
     const classesUI = useStyles();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [inputFieldsData, setInputFieldsData] = useState({
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+    })
     const [isSignUp, setIsSignUp] = useState(false);
 
     useEffect(() => {
@@ -57,12 +60,12 @@ const Auth = props => {
 
     const onSubmitHandler = (event) => {
         event.preventDefault();
-        props.onAuth(email, password, firstName, lastName, isSignUp);
+        props.onAuth(inputFieldsData, isSignUp);
     }
 
     const isSignUpToggle = () => {
         setIsSignUp(!isSignUp);
-        setPassword("");
+        setInputFieldsData({...inputFieldsData, password: ''})
     }
 
     const onForgotPasswordHandler = async () => {
@@ -106,8 +109,8 @@ const Auth = props => {
                                 fullWidth
                                 id="firstName"
                                 label="First Name"
-                                value={firstName}
-                                onChange={(event) => setFirstName(event.target.value)}
+                                value={inputFieldsData.firstName}
+                                onChange={(event) => setInputFieldsData({...inputFieldsData, firstName: event.target.value})}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -119,8 +122,8 @@ const Auth = props => {
                                 label="Last Name"
                                 name="lastName"
                                 autoComplete="lname"
-                                value={lastName}
-                                onChange={(event) => setLastName(event.target.value)}
+                                value={inputFieldsData.lastName}
+                                onChange={(event) => setInputFieldsData({...inputFieldsData, lastName: event.target.value})}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -132,8 +135,8 @@ const Auth = props => {
                                 label="Email Address"
                                 name="email"
                                 autoComplete="email"
-                                value={email}
-                                onChange={(event) => setEmail(event.target.value)}
+                                value={inputFieldsData.email}
+                                onChange={(event) => setInputFieldsData({...inputFieldsData, email: event.target.value})}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -146,8 +149,8 @@ const Auth = props => {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
-                                value={password}
-                                onChange={(event) => setPassword(event.target.value)}
+                                value={inputFieldsData.password}
+                                onChange={(event) => setInputFieldsData({...inputFieldsData, password: event.target.value})}
                             />
                         </Grid>
 
@@ -193,8 +196,8 @@ const Auth = props => {
                         id="email"
                         label="Email Address"
                         name="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        value={inputFieldsData.email}
+                        onChange={(event) => setInputFieldsData({...inputFieldsData, email: event.target.value})}
                     />
                     <TextField
                         variant="outlined"
@@ -205,8 +208,8 @@ const Auth = props => {
                         label="Password"
                         type="password"
                         id="password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
+                        value={inputFieldsData.password}
+                        onChange={(event) => setInputFieldsData({...inputFieldsData, password: event.target.value})}
                     />
                     {spinner}
                     <Button
@@ -252,19 +255,13 @@ const Auth = props => {
 const mapStateToProps = state => {
     return {
         loading: state.auth.loading,
-        error: state.auth.error,
         isAuthenticated: state.auth.token !== null,
-        authRedirectPath: state.auth.authRedirectPath,
-        isUserCreated: state.auth.isUserCreated
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (email, password, firstName, lastName, isSignUp) => dispatch(actions.auth(email, password, firstName, lastName, isSignUp)),
-        // onSetAuthRedirectPath: () => dispatch( actions.setAuthRedirectPath( '/' ) )
-        onChangeSignUpState: (status) => {
-        }
+        onAuth: (inputFieldsData, isSignUp) => dispatch(actions.auth(inputFieldsData, isSignUp)),
     };
 };
 

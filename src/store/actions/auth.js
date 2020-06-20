@@ -27,13 +27,6 @@ export const authFail = (error) => {
     };
 };
 
-export const authSignUpChangeStatus = (status) => {
-    return {
-        type: actionTypes.AUTH_SUCCESSFUL_SIGN_UP,
-        status: status
-    };
-};
-
 
 export const logout = () => {
     localStorage.removeItem('token');
@@ -79,20 +72,13 @@ const massageAuthError = (errorCode) => {
     const error = ErrorCodeFirebase[errorCode]
     MySwal.fire({
         title: `Oops...`,
-        text: `${error ? error :"Unknown error" }`,
+        text: `${error ? error : "Unknown error"}`,
         icon: 'error',
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Try Again'
     })
 }
 
-
-export const setAuthRedirectPath = (path) => {
-    return {
-        type: actionTypes.SET_AUTH_REDIRECT_PATH,
-        path: path
-    };
-};
 
 export const authCheckState = () => {
     return dispatch => {
@@ -112,12 +98,12 @@ export const authCheckState = () => {
     };
 };
 
-export const auth = (email, password, firstName, lastName, isSignUp) => {
+export const auth = (inputFieldsData, isSignUp) => {
     const userDetails = {
-        email: email.trim(),
-        password: password,
-        firstName: firstName.trim(),
-        lastName: lastName.trim()
+        email: inputFieldsData.email.trim(),
+        password: inputFieldsData.password,
+        firstName: inputFieldsData.firstName.trim(),
+        lastName: inputFieldsData.lastName.trim()
     }
     return dispatch => {
         dispatch(authStart());
@@ -128,12 +114,11 @@ export const auth = (email, password, firstName, lastName, isSignUp) => {
                     firebase.database().ref('Trainings/' + firebaseUser.user.uid).push(
                         {trainingsData}
                     );
-                    massageAfterSignUp(dispatch, firebaseUser, firstName, lastName);
+                    massageAfterSignUp(dispatch, firebaseUser, inputFieldsData.firstName, inputFieldsData.lastName);
                 })
                 .catch(error => {
                     dispatch(authFail(error.message));
                     massageAuthError(error.code);
-                    console.log(error);
                 });
         } else {
             firebase.auth().signInWithEmailAndPassword(userDetails.email, userDetails.password)

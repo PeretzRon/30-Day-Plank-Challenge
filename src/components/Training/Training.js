@@ -11,13 +11,14 @@ import Button from "@material-ui/core/Button";
 import {makeStyles} from '@material-ui/core/styles';
 import CardActions from "@material-ui/core/CardActions";
 
+// materiel UI card style
 const UseStyles = makeStyles({
     root: {
         width: 330,
-        backgroundColor: '#efeff6bf',
+        backgroundColor: '#abd2ff52',
         margin: '10px',
         textAlign: 'center',
-        border: '1px solid #ccc'
+        border: '1px solid #ccc',
     },
     media: {
         height: 140,
@@ -27,8 +28,9 @@ const UseStyles = makeStyles({
     },
     day: {
         fontFamily: `"Anton", sans-serif`,
-        color: 'gray',
+        color: '#a0a6ac;',
         transform: 'translateY(30px)',
+
     },
     actionName: {
         fontFamily: `"Lato", sans-serif`,
@@ -54,7 +56,7 @@ const training = props => {
     const classes = UseStyles();
     let isCompletedStyle = ""
     if (props.isCompleted) {
-        isCompletedStyle = classes.lineCross;
+        isCompletedStyle = classes.lineCross; // add line cross on text if the training is done
     }
 
     let title = null
@@ -92,7 +94,7 @@ const training = props => {
                     {props.isCompleted ? 'UNDONE' : 'DONE'}
                 </Button>
                 {!props.isCompleted && <Button
-                    style={{color: '#000', border: '1px solid #000',  backgroundColor: '#f6f1f1'}}
+                    style={{color: '#000', border: '1px solid #000', backgroundColor: '#fff'}}
                     startIcon={<PlayArrowIcon/>}
                     onClick={props.startAction}
                     variant="outlined"
@@ -105,4 +107,4 @@ const training = props => {
     )
 }
 
-export default training;
+export default React.memo(training);

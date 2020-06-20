@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import soundGong from '../../../resources/sound/harp-strum-sound-effect.mp3';
 
+// That component is for display data inside the counterDown
 const RenderTime = (type, time) => {
 
     if (time === 0) {
@@ -23,6 +24,7 @@ const RenderTime = (type, time) => {
     );
 };
 
+// Scroll to the active Timer
 const scrollToRef = (ref, i) => {
     const refElement = ref.current[i];
     if (refElement) {
@@ -42,14 +44,15 @@ const CounterDown = props => {
         activeTimer = 670;
         nonActiveTimer = 670
     }
-
-    const [currentPlay, setCurrentPlay] = useState({1: false, 2: false, 3: false});
-    const [isButtonsDisable, setIsButtonsDisable] = useState(false)
+    const createObj = {};
+    props.timers.forEach((el, index) => createObj[index] = false)
+    const [currentPlay, setCurrentPlay] = useState(createObj);
+    const [isButtonsDisable, setIsButtonDisable] = useState(false)
     const myRef = useRef([]);
 
     const onFinishAllTimers = () => {
         const audio = new Audio(soundGong)
-        audio.play();
+        audio.play(); // play sound
         MySwal.fire({
             title: 'Did you finish successfully?',
             text: `${props.timers.map(elem => elem.name).join(' + ')}`,
@@ -57,10 +60,12 @@ const CounterDown = props => {
             showCancelButton: true,
             confirmButtonText: 'Yes!',
             cancelButtonText: 'No',
+            cancelButtonColor: 'rgba(3,116,253,0.32)',
             reverseButtons: true
         }).then((result) => {
             audio.pause();
             if (result.value) {
+                // user press yes
                 MySwal.fire({
                         title: 'Well done!',
                         icon: 'success',
@@ -69,13 +74,14 @@ const CounterDown = props => {
                     props.finishedTraining();
                 })
             } else {
+                // user press no or any place out from the dialog
                 MySwal.fire({
                         title: 'You are great!',
                         text: 'Try tomorrow, you sure will succeed :)',
                         icon: 'info',
                     }
                 ).then(() => {
-                 props.cancelTraining();
+                    props.cancelTraining();
                 })
             }
         })
@@ -83,7 +89,6 @@ const CounterDown = props => {
 
     const onTimerCompletedHandler = (id) => {
         if (id === props.timers.length) {
-            setIsButtonsDisable(true)
             onFinishAllTimers();
             return;
         }
@@ -96,16 +101,19 @@ const CounterDown = props => {
 
     const onStartTimerButtonHandler = () => {
         onTimerCompletedHandler(0);
+        setIsButtonDisable(true)
     }
 
     return (
         <div className={classes.TimerWrapper}>
             <div>
-                <Button disabled={isButtonsDisable} style={{color: "#000", backgroundColor: "#dbdfe2"}}
+                <Button disabled={isButtonsDisable}
+                        style={{color: "#000", backgroundColor: "#abd2ff52", border: '1px solid black'}}
                         variant="outlined"
+                        className={classes.BtnStart}
                         startIcon={<PlayCircleFilledWhiteOutlinedIcon/>}
                         onClick={onStartTimerButtonHandler}>Start</Button>
-                <Button disabled={isButtonsDisable} style={{color: "#000", backgroundColor: "#dbdfe2"}}
+                <Button style={{color: "#000", backgroundColor: '#fff', border: '1px solid black'}}
                         variant="outlined"
                         startIcon={<CancelOutlinedIcon/>}
                         onClick={props.cancelTraining}>ABORT!</Button>
@@ -117,9 +125,8 @@ const CounterDown = props => {
                             isPlaying={currentPlay[item.id]}
                             duration={item.duration}
                             size={currentPlay[item.id] ? activeTimer : nonActiveTimer}
-                            colors={[["#2c5d74", 0.33], ["#1a729c", 0.33], ["#2786b1"]]}
-                            onComplete={() => onTimerCompletedHandler(item.id)}
-                        >
+                            colors={[["#0985bf", 0.33], ["#03a9f4", 0.33], ["#b3e5fc"]]}
+                            onComplete={() => onTimerCompletedHandler(item.id)}>
                             {({remainingTime}) =>
                                 RenderTime(item.type, remainingTime)
                             }
@@ -127,7 +134,6 @@ const CounterDown = props => {
                     </div>
                 })}
             </div>
-
         </div>
     )
 }

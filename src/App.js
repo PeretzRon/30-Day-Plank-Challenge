@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-// import logo from './logo.svg';
 import Layout from "./hoc/Layout/Layout";
 import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import Trainings from "./containers/Trainings/Trainings";

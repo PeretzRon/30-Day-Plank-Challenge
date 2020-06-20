@@ -1,19 +1,8 @@
-:root {
-    --bg: #fdfdfd;
-    --highlight1: #a3dff6;
-    --highlight2: #2ea8d0;
-    --color: #1a1e24;
-    --font-number: 'Lato', sans-serif;
-    --font-head: 'Varela Round', serif;
-    --font: 'Lato', serif;
-}
-
 
 .Steps {
     display: flex;
     justify-content: center;
 }
-
 
 .List {
     list-style: none;
@@ -42,15 +31,15 @@
 }
 
 .Item:before {
-    font: bold 2.25rem/1 var(--font-number);
+    font: bold 2.25rem/1 'Lato', sans-serif;
     content: counter(list);
     width: 5rem;
     height: 5rem;
     float: left;
     margin: 0 1.5rem 0.75rem 0;
-    color: var(--bg);
-    background: var(--highlight1) linear-gradient(to bottom right, var(--highlight1) 25%, var(--highlight2));
-    text-shadow: 0 0 2px var(--highlight1);
+    color:  #fdfdfd;
+    background: #a3dff6 linear-gradient(to bottom right, #a3dff6 25%, #2ea8d0);
+    text-shadow: 0 0 2px #a3dff6;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
@@ -66,7 +55,7 @@
     top: 0;
     left: 0;
     content: "";
-    background: var(--highlight1);
+    background: #a3dff6;
     z-index: -1;
     border-top-left-radius: 3px;
 }
@@ -74,15 +63,15 @@
 
 .Headline {
     margin: 0 0 1rem 0;
-    font: normal 2rem var(--font-head);
+    font: normal 2rem 'Varela Round', serif;
 }
 
 @media only screen and (max-width: 599px) {
     .Item h2 {
-       font-size: 1.7rem;
+        font-size: 1.7rem;
     }
 
     .Item span {
-            font-size: 1rem;
+        font-size: 1rem;
     }
 }
