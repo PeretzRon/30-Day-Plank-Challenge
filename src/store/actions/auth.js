@@ -101,14 +101,13 @@ export const authCheckState = () => {
 export const auth = (inputFieldsData, isSignUp) => {
     const userDetails = {
         email: inputFieldsData.email.trim(),
-        password: inputFieldsData.password,
         firstName: inputFieldsData.firstName.trim(),
         lastName: inputFieldsData.lastName.trim()
     }
     return dispatch => {
         dispatch(authStart());
         if (isSignUp) {
-            firebase.auth().createUserWithEmailAndPassword(userDetails.email, userDetails.password)
+            firebase.auth().createUserWithEmailAndPassword(userDetails.email, inputFieldsData.password)
                 .then(firebaseUser => {
                     firebase.database().ref('Users/' + firebaseUser.user.uid).set(userDetails);
                     firebase.database().ref('Trainings/' + firebaseUser.user.uid).push(
@@ -121,7 +120,7 @@ export const auth = (inputFieldsData, isSignUp) => {
                     massageAuthError(error.code);
                 });
         } else {
-            firebase.auth().signInWithEmailAndPassword(userDetails.email, userDetails.password)
+            firebase.auth().signInWithEmailAndPassword(userDetails.email, inputFieldsData.password)
                 .then(firebaseUser => {
                     onSuccessfulAuth(dispatch, firebaseUser)
                 })
