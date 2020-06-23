@@ -47,11 +47,10 @@ const CounterDown = props => {
     const createObj = {};
     props.timers.forEach((el, index) => createObj[index] = false)
     const [currentPlay, setCurrentPlay] = useState(createObj);
-    const [isButtonsDisable, setIsButtonDisable] = useState(false)
     const myRef = useRef([]);
 
     const onFinishAllTimers = () => {
-        const audio = new Audio(soundGong)
+        const audio = new Audio(soundGong);
         audio.play(); // play sound
         MySwal.fire({
             title: 'Did you finish successfully?',
@@ -101,18 +100,17 @@ const CounterDown = props => {
 
     const onStartTimerButtonHandler = () => {
         onTimerCompletedHandler(0);
-        setIsButtonDisable(true)
     }
 
     return (
         <div className={classes.TimerWrapper}>
             <div>
-                <Button disabled={isButtonsDisable}
-                        style={{color: "#000", backgroundColor: "#abd2ff52", border: '1px solid black'}}
-                        variant="outlined"
-                        className={classes.BtnStart}
-                        startIcon={<PlayCircleFilledWhiteOutlinedIcon/>}
-                        onClick={onStartTimerButtonHandler}>Start</Button>
+                <Button
+                    style={{color: "#000", backgroundColor: "#abd2ff52", border: '1px solid black'}}
+                    variant="outlined"
+                    className={classes.BtnStart}
+                    startIcon={<PlayCircleFilledWhiteOutlinedIcon/>}
+                    onClick={onStartTimerButtonHandler}>Start</Button>
                 <Button style={{color: "#000", backgroundColor: '#fff', border: '1px solid black'}}
                         variant="outlined"
                         startIcon={<CancelOutlinedIcon/>}

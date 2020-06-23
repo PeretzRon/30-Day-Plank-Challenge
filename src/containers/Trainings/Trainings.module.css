@@ -38,6 +38,10 @@
     height: 200vh;
 }
 
+.ShowMoreBtn {
+    margin: 20px 0 !important;
+}
+
 @media only screen and (max-width: 599px) {
     .Title {
         font-size: 3rem;

@@ -37,8 +37,7 @@
 }
 
 .BtnStart {
-    animation: scaleInOut 2s 2 forwards ;
-;
+    animation: scaleInOut 1s 2 forwards;
 }
 
 @keyframes scaleInOut {

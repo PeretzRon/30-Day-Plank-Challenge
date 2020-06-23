@@ -10,6 +10,8 @@ import CounterDownControl from "../../components/CounterDownControl/CounterDownC
 import TransitionGroup from "react-transition-group/TransitionGroup";
 import CSSTransition from "react-transition-group/CSSTransition";
 import '../../Effects.css'
+import Button from "@material-ui/core/Button";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 
 const scrollToRef = (ref) => {
@@ -28,6 +30,8 @@ const Trainings = props => {
     const [selectedTraining, setSelectedTraining] = useState([]);
     const myRef = useRef();
     const starCountRef = firebase.database().ref();
+    const [daysPerViewUnDoneTraining, setDaysPerViewUnDoneTraining] = useState({val: 8, buttonDisable: false});
+    const [daysPerViewDoneTraining, setDaysPerViewDoneTraining] = useState({val: 8, buttonDisable: false});
 
 
     useEffect(() => {
@@ -131,6 +135,17 @@ const Trainings = props => {
         onButtonDoneOrUndoneHandler(null, selectedTraining[0].TrainingID, 'DONE')
     };
 
+    // handle with button that user want to see more of his trainings
+    const onShowMoreDaysHandler = (event, state, setState, trainings) => {
+        console.log(event.currentTarget.id);
+        const newValueForDaysView = state.val + 8;
+        newValueForDaysView > trainings.length ? setState({
+                val: newValueForDaysView,
+                buttonDisable: true
+            }) :
+            setState({...state, val: newValueForDaysView});
+    };
+
     let data;
     if ((userUnDoneTrainings.length === 0 && userDoneTrainings.length === 0)) {
         data = <div className={classes.PageHeight}>
@@ -144,7 +159,7 @@ const Trainings = props => {
                 <section>
                     <p className={classes.Title}>Active Exercises</p>
                     <TransitionGroup className={classes.Trainings}>
-                        {userUnDoneTrainings.map(training => {
+                        {userUnDoneTrainings.slice(0, daysPerViewUnDoneTraining.val).map(training => {
                             return <CSSTransition
                                 key={training.id}
                                 timeout={370}
@@ -157,23 +172,41 @@ const Trainings = props => {
                             </CSSTransition>
                         })}
                     </TransitionGroup>
+                    {!daysPerViewUnDoneTraining.buttonDisable && <Button
+                        disabled={daysPerViewUnDoneTraining.buttonDisable}
+                        id={'moreUnDone'}
+                        className={classes.ShowMoreBtn}
+                        onClick={(event) => onShowMoreDaysHandler(event, daysPerViewUnDoneTraining, setDaysPerViewUnDoneTraining, userUnDoneTrainings)}
+                        variant="outlined"
+                        startIcon={<ExpandMoreIcon/>}
+                        size="small"
+                        color="primary">Show More</Button>}
                 </section>
                 <section>
                     {userDoneTrainings.length !== 0 && <React.Fragment>
                         <p className={classes.Title}>Finished Exercises</p>
                         <TransitionGroup className={classes.Trainings}>
-                            {userDoneTrainings.map(training => {
+                            {userDoneTrainings.slice(0, daysPerViewDoneTraining.val).map(training => {
                                 return <CSSTransition
                                     key={training.id}
                                     timeout={370}
                                     classNames='item'>
-                                    <Training key={training.id} action={training.name} day={training.id}
+                                    <Training key={training.id} action={training.name} day={training.id} ExpandMoreIcon
                                               isCompleted={training.isCompleted}
                                               completed={(event) => onButtonDoneOrUndoneHandler(event, training.id)}/>
                                 </CSSTransition>
                             })}
                         </TransitionGroup>
                     </React.Fragment>}
+                    {!daysPerViewDoneTraining.buttonDisable && <Button
+                        disabled={daysPerViewDoneTraining.buttonDisable}
+                        id={'moreDone'}
+                        className={classes.ShowMoreBtn}
+                        onClick={(event) => onShowMoreDaysHandler(event, daysPerViewDoneTraining, setDaysPerViewDoneTraining, userDoneTrainings)}
+                        variant="outlined"
+                        startIcon={<ExpandMoreIcon/>}
+                        size="small"
+                        color="primary">Show More</Button>}
                 </section>
                 {isCounterDown &&
                 <div ref={myRef} className={classes.CounterDownSection}>
