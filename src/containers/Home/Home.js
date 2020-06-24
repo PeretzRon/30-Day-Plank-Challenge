@@ -3,11 +3,7 @@ import Header from "./Header/Header";
 import HowItWorks from "./HowItWorks/HowItWorks";
 
 const Home = props => {
-
-    useEffect(() => {
-        window.scrollTo({top: 0});
-    }, [])
-
+    window.scrollTo({top: 0});
     return (
         <React.Fragment>
             <Header/>
