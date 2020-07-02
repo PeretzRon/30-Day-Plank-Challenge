@@ -20,7 +20,7 @@ export const trainingsData = {
     16: {id: 16, name: '70 Sec Plank + 35 Sec Walking Plank', isCompleted: false, type: ['p', 'wp']},
     17: {id: 17, name: '70 Sec Plank + 40 Sec Walking Plank', isCompleted: false, type: ['p', 'wp']},
     18: {id: 18, name: '75 Sec Plank + 40 Sec Walking Plank', isCompleted: false, type: ['p', 'wp']},
-    19: {id: 19, name: '88 Sec Plank + 40 Sec Walking Plank', isCompleted: false, type: ['p', 'wp']},
+    19: {id: 19, name: '80 Sec Plank + 40 Sec Walking Plank', isCompleted: false, type: ['p', 'wp']},
     20: {
         id: 20,
         name: '60 Sec Plank + 30 Sec Walking Plank + 10 Sec Superman Plank',
