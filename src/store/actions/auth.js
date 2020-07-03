@@ -102,7 +102,8 @@ export const auth = (inputFieldsData, isSignUp) => {
     const userDetails = {
         email: inputFieldsData.email.trim(),
         firstName: inputFieldsData.firstName.trim(),
-        lastName: inputFieldsData.lastName.trim()
+        lastName: inputFieldsData.lastName.trim(),
+        dateCreated: new Date().toString(),
     }
     return dispatch => {
         dispatch(authStart());

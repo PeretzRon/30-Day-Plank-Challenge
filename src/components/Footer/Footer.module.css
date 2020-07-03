@@ -7,7 +7,6 @@ footer {
 
 }
 
-
 .mainRow {
     display: flex;
     justify-content: space-between;
@@ -22,12 +21,27 @@ footer {
     justify-content: center;
 }
 
+.logoBox {
+    margin: 0 40px;
+    transform: translateY(-30px);
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+
 .socialLinks {
     transform: translateY(10px);
     flex: 1;
     display: flex;
     justify-content: center;
 }
+
+.Logo {
+    height: 140px;
+    width: 160px;
+}
+
 
 
 .socialLinks ul {
@@ -96,4 +110,15 @@ footer p {
         transform: translate(0);
     }
 
+    .Logo {
+        height: 80px;
+        width: 90px;
+    }
+
+    .logoBox {
+        transform: translate(0);
+    }
+
 }
+
+
